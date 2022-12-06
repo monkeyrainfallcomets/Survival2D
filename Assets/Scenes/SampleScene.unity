@@ -534,9 +534,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c809b2f958d30431b9d65472f69e613d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: {x: 200, y: 200}
-  scale: {x: 50, y: 50}
-  seed: 17959
+  size: {x: 100, y: 100}
+  scale: {x: 25, y: 25}
+  seed: 9197589
+  lacunarity: 2
+  persistancy: 0.1
+  octaves: 5
 --- !u!114 &1034916764
 MonoBehaviour:
   m_ObjectHideFlags: 0
