@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NoiseMap : MonoBehaviour
+[CreateAssetMenu(fileName = "New NoiseMap", menuName = "WorldGen/NoiseMap")]
+public class NoiseMap : ScriptableObject
 {
     [SerializeField] Vector2 scale;
     [SerializeField] float lacunarity;
