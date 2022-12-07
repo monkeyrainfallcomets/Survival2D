@@ -32,7 +32,6 @@ public class NoiseTest : MonoBehaviour
                     amplitude *= persistancy;
                     frequency *= lacunarity;
                 }
-
                 Color color = Color.Lerp(Color.white, Color.black, noiseValue);
                 pixels[y * size.y + x] = color;
             }

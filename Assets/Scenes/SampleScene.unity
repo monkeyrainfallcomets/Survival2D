@@ -233,6 +233,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 332555223}
+  - component: {fileID: 332555224}
   m_Layer: 0
   m_Name: WorldGenerator
   m_TagString: Untagged
@@ -255,6 +256,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &332555224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 332555222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87c1e6415fa4d474690ffb8033f92ee4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worlds:
+  - {fileID: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -534,8 +549,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c809b2f958d30431b9d65472f69e613d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: {x: 100, y: 100}
-  scale: {x: 25, y: 25}
+  size: {x: 14000, y: 14000}
+  scale: {x: 50, y: 50}
   seed: 9197589
   lacunarity: 2
   persistancy: 0.1
