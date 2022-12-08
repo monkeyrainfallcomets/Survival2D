@@ -3,6 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Biome", menuName = "WorldGen/Biome")]
-public class Biome : ScriptableObject
+public class BiomeParams : ScriptableObject
 {
+    public Range noiseValue;
+    public Placement[] placements;
 }
+
+public class Placement
+{
+    Range noiseValue;
+
+}
+
