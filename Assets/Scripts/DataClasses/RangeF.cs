@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[System.Serializable]
 public struct RangeF
 {
     public float min;
@@ -16,5 +16,10 @@ public struct RangeF
     public float GenerateNumber()
     {
         return Random.Range(min, max);
+    }
+
+    public bool WithinRange(float num)
+    {
+        return num > min && num < max;
     }
 }

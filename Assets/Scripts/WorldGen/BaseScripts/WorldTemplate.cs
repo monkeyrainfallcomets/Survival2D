@@ -1,27 +1,67 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Tilemaps;
 [CreateAssetMenu(fileName = "New World", menuName = "WorldGen/World")]
 public class WorldTemplate : ScriptableObject
 {
-    public NoiseMap biomeMap { get { return biomeMap; } set { biomeMap = value; } }
-    public NoiseMap tileNoiseMap { get { return tileNoiseMap; } set { tileNoiseMap = value; } }
-    BiomeParams[] biomeParams;
+    [SerializeField] NoiseMap moistureMap;
+    [SerializeField] NoiseMap heatMap;
+    [SerializeField] NoiseMap heightMap;
+    [SerializeField] TileGroup[] tileGroups;
     public void PlaceTile(Chunk chunk, Vector2Int position)
     {
-        float biomeNoiseValue = chunk.world.biomeMap.GetValue(position);
-        float tileNoiseValue = chunk.world.tileNoiseMap.GetValue(position);
-        for (int i = 0; i < biomeParams.Length; i++)
+        SelectTile(chunk, position).Place(chunk, position);
+    }
+    Placement SelectTile(Chunk chunk, Vector2Int position)
+    {
+        float moistureValue = chunk.CurrentWorld().moistureMap.GetValue(position);
+        float heatValue = chunk.CurrentWorld().heatMap.GetValue(position);
+        float heightValue = chunk.CurrentWorld().heightMap.GetValue(position);
+        for (int i = 0; i < tileGroups.Length; i++)
         {
-            if (i == biomeParams.Length - 1)
+            if (tileGroups[i].WithinRange(heatValue, moistureValue))
             {
-                biomeParams[i].PlaceTile(chunk, position, tileNoiseValue);
+                return tileGroups[i].GetTile(heatValue, moistureValue, heightValue);
             }
-            if (biomeParams[i].PlaceTile(chunk, position, biomeNoiseValue, tileNoiseValue))
+        }
+        return tileGroups[tileGroups.Length - 1].GetLastTile();
+    }
+    public void GenerateSeeds()
+    {
+        moistureMap.GenerateRandomSeed();
+        heightMap.GenerateRandomSeed();
+        heatMap.GenerateRandomSeed();
+    }
+
+    [System.Serializable]
+    public struct TileGroup
+    {
+        [SerializeField] RangeF heatValue;
+        [SerializeField] RangeF moistureValue;
+        [SerializeField] Placement[] tiles;
+
+        public bool WithinRange(float heat, float moisture)
+        {
+            return heatValue.WithinRange(heat) && moistureValue.WithinRange(moisture);
+        }
+
+        public Placement GetTile(float heat, float moisture, float height)
+        {
+            for (int i = 0; i < tiles.Length; i++)
             {
-                return;
+                if (tiles[i].CanPlace(heat, moisture, height))
+                {
+                    return tiles[i];
+                }
             }
+            return GetLastTile();
+        }
+        public Placement GetLastTile()
+        {
+            return tiles[tiles.Length - 1];
         }
     }
 }
+
+

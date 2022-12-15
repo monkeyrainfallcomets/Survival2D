@@ -5,38 +5,46 @@ using UnityEngine.Tilemaps;
 using System;
 public class Chunk
 {
-    Dictionary<Vector2Int, bool> structurePositions = new Dictionary<Vector2Int, bool>();
-    public Vector2Int position { get { return position; } private set { position = value; } }
-    public WorldTemplate world { get { return world; } private set { world = value; } }
-    Tilemap tilemap;
-    public bool active { get { return active; } set { tilemap.gameObject.SetActive(value); active = value; } }
-
-    public Chunk(WorldTemplate world, Tilemap tilemap, Vector2Int position)
+    Vector2Int position;
+    WorldTemplate world;
+    Tilemap detailmap;
+    Tilemap baseTilemap;
+    Tilemap collisionDetailmap;
+    bool active;
+    public Chunk(WorldTemplate world, ChunkPrefab chunkPrefab, Transform grid, Vector2Int position)
     {
         this.world = world;
         this.position = position;
-        this.tilemap = tilemap;
+        GameObject chunk = new GameObject("chunk");
+        Vector3 worldPosition = new Vector3(position.x, position.y, 0);
+        baseTilemap = MonoBehaviour.Instantiate(chunkPrefab.baseTilemap, worldPosition, Quaternion.identity);
+        baseTilemap.transform.SetParent(grid);
+        detailmap = MonoBehaviour.Instantiate(chunkPrefab.detailmap, worldPosition, Quaternion.identity);
+        detailmap.transform.SetParent(grid);
+        collisionDetailmap = MonoBehaviour.Instantiate(chunkPrefab.collisionDetailmap, worldPosition, Quaternion.identity);
+        collisionDetailmap.transform.SetParent(grid);
         active = true;
     }
     public void PlaceTile(TileBase tile, Vector3Int position)
     {
-        tilemap.SetTile(position, tile);
+        baseTilemap.SetTile(position, tile);
+    }
+    public bool IsActive()
+    {
+        return active;
+    }
+    public void SetActive(bool active)
+    {
+        this.active = active;
+    }
+    public Vector2Int GetPosition()
+    {
+        return position;
     }
 
-    public void SetStructurePosition(Vector2Int position)
+    public WorldTemplate CurrentWorld()
     {
-        if (!structurePositions.ContainsKey(position))
-        {
-            structurePositions.Add(position, true);
-        }
-    }
-
-    public void RemoveStructurePosition(Vector2Int position)
-    {
-        if (structurePositions.ContainsKey(position))
-        {
-            structurePositions.Remove(position);
-        }
+        return world;
     }
 }
 

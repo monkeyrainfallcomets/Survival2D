@@ -12,7 +12,7 @@ public class NoiseMap : ScriptableObject
     [SerializeField] int seed;
     public float GenerateRandomSeed()
     {
-        seed = Random.Range(0, 999999999);
+        seed = Random.Range(0, 9999999);
         return seed;
     }
     public float GetValue(Vector2Int coordinates)

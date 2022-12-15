@@ -1,0 +1,186 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cb0dcd6874584c6b96905492d78a37a, type: 3}
+  m_Name: Earth
+  m_EditorClassIdentifier: 
+  moistureMap: {fileID: 11400000, guid: c4befc2fbee04433893bf7e297f47447, type: 2}
+  heatMap: {fileID: 11400000, guid: b729b521339ac4402ab2f2343011d7e9, type: 2}
+  heightMap: {fileID: 11400000, guid: a6a3646901ac145318a9ea3f0bcf2e07, type: 2}
+  tileGroups:
+  - heatValue:
+      min: 0
+      max: 0.3
+    moistureValue:
+      min: 0
+      max: 0.5
+    tiles:
+    - tile: {fileID: 11400000, guid: 56fca305ce06949e3a7279d7022b8461, type: 2}
+      heatValue:
+        min: 0.2
+        max: 0.3
+      moistureValue:
+        min: 0.5
+        max: 1
+      heightValue:
+        min: 0
+        max: 1
+    - tile: {fileID: 11400000, guid: 56fca305ce06949e3a7279d7022b8461, type: 2}
+      heatValue:
+        min: 0.2
+        max: 0.3
+      moistureValue:
+        min: 0
+        max: 1
+      heightValue:
+        min: 0
+        max: 0.3
+    - tile: {fileID: 11400000, guid: 074a4ee2c498341478ed18ad547b1961, type: 2}
+      heatValue:
+        min: 0
+        max: 1
+      moistureValue:
+        min: 0
+        max: 0.5
+      heightValue:
+        min: 0.3
+        max: 0.75
+    - tile: {fileID: 11400000, guid: d7b14950c54b441a7b2d6abba7662def, type: 2}
+      heatValue:
+        min: 0
+        max: 1
+      moistureValue:
+        min: 0
+        max: 1
+      heightValue:
+        min: 0
+        max: 1
+  - heatValue:
+      min: 0.3
+      max: 0.75
+    moistureValue:
+      min: 0
+      max: 0.5
+    tiles:
+    - tile: {fileID: 11400000, guid: e1cd020e1321246e1847f0aa3288e950, type: 2}
+      heatValue:
+        min: 0
+        max: 1
+      moistureValue:
+        min: 0
+        max: 1
+      heightValue:
+        min: 0
+        max: 0.3
+    - tile: {fileID: 11400000, guid: 56fca305ce06949e3a7279d7022b8461, type: 2}
+      heatValue:
+        min: 0
+        max: 1
+      moistureValue:
+        min: 0
+        max: 1
+      heightValue:
+        min: 0.3
+        max: 0.5
+    - tile: {fileID: 11400000, guid: 56fca305ce06949e3a7279d7022b8461, type: 2}
+      heatValue:
+        min: 0
+        max: 1
+      moistureValue:
+        min: 0.5
+        max: 1
+      heightValue:
+        min: 0
+        max: 1
+    - tile: {fileID: 11400000, guid: 609a5c25acbc349dc9eecc327cbc6858, type: 2}
+      heatValue:
+        min: 0
+        max: 1
+      moistureValue:
+        min: 0.4
+        max: 0.5
+      heightValue:
+        min: 0.5
+        max: 1
+    - tile: {fileID: 11400000, guid: 746ff69d18d89402fb6059ebd7d21cd2, type: 2}
+      heatValue:
+        min: 0
+        max: 1
+      moistureValue:
+        min: 0
+        max: 1
+      heightValue:
+        min: 0
+        max: 1
+  - heatValue:
+      min: 0
+      max: 1
+    moistureValue:
+      min: 0.5
+      max: 1
+    tiles:
+    - tile: {fileID: 11400000, guid: 56fca305ce06949e3a7279d7022b8461, type: 2}
+      heatValue:
+        min: 0
+        max: 1
+      moistureValue:
+        min: 0
+        max: 1
+      heightValue:
+        min: 0
+        max: 1
+  - heatValue:
+      min: 0.75
+      max: 1
+    moistureValue:
+      min: 0
+      max: 1
+    tiles:
+    - tile: {fileID: 11400000, guid: e1cd020e1321246e1847f0aa3288e950, type: 2}
+      heatValue:
+        min: 0
+        max: 1
+      moistureValue:
+        min: 0
+        max: 1
+      heightValue:
+        min: 0.1
+        max: 0.3
+    - tile: {fileID: 11400000, guid: b8f7ec54a5a6a4a5a8a2dd5dc21031b9, type: 2}
+      heatValue:
+        min: 0
+        max: 1
+      moistureValue:
+        min: 0
+        max: 1
+      heightValue:
+        min: 0
+        max: 0.1
+    - tile: {fileID: 11400000, guid: 609a5c25acbc349dc9eecc327cbc6858, type: 2}
+      heatValue:
+        min: 0.75
+        max: 0.9
+      moistureValue:
+        min: 0
+        max: 1
+      heightValue:
+        min: 0.3
+        max: 1
+    - tile: {fileID: 11400000, guid: b8f7ec54a5a6a4a5a8a2dd5dc21031b9, type: 2}
+      heatValue:
+        min: 0.95
+        max: 1
+      moistureValue:
+        min: 0
+        max: 1
+      heightValue:
+        min: 0
+        max: 1
