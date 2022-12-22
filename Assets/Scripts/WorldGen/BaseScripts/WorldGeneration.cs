@@ -7,8 +7,9 @@ public class WorldGeneration : MonoBehaviour
 {
     public static event EventHandler<ChunkEvent> ChunkGenerating;
     public static event EventHandler<ChunkEvent> ChunkGenerated;
+    [SerializeField] SerializableDictionary<int, int> dictionary;
 
-    [SerializeField] ChunkPrefab chunkPrefab;
+    [SerializeField] WorldChunk chunkPrefab;
     [SerializeField] WorldTemplate[] worlds;
     [SerializeField] GameObject[] playerPrefabs;
     [SerializeField] Transform grid;
@@ -49,10 +50,4 @@ public class WorldGeneration : MonoBehaviour
     }
 }
 
-[System.Serializable]
-public struct ChunkPrefab
-{
-    public Tilemap collisionDetailmap;
-    public Tilemap detailmap;
-    public Tilemap baseTilemap;
-}
+

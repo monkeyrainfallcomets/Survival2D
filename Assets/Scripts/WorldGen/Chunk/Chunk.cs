@@ -11,17 +11,17 @@ public class Chunk
     Tilemap baseTilemap;
     Tilemap collisionDetailmap;
     bool active;
-    public Chunk(WorldTemplate world, ChunkPrefab chunkPrefab, Transform grid, Vector2Int position)
+    public Chunk(WorldTemplate world, WorldChunk chunkPrefab, Transform grid, Vector2Int position)
     {
         this.world = world;
         this.position = position;
         GameObject chunk = new GameObject("chunk");
         Vector3 worldPosition = new Vector3(position.x, position.y, 0);
-        baseTilemap = MonoBehaviour.Instantiate(chunkPrefab.baseTilemap, worldPosition, Quaternion.identity);
+        baseTilemap = MonoBehaviour.Instantiate(chunkPrefab.GetBaseTilemap(), worldPosition, Quaternion.identity);
         baseTilemap.transform.SetParent(grid);
-        detailmap = MonoBehaviour.Instantiate(chunkPrefab.detailmap, worldPosition, Quaternion.identity);
+        detailmap = MonoBehaviour.Instantiate(chunkPrefab.GetDetailTilemap(), worldPosition, Quaternion.identity);
         detailmap.transform.SetParent(grid);
-        collisionDetailmap = MonoBehaviour.Instantiate(chunkPrefab.collisionDetailmap, worldPosition, Quaternion.identity);
+        collisionDetailmap = MonoBehaviour.Instantiate(chunkPrefab.GetCollisionDetailmap(), worldPosition, Quaternion.identity);
         collisionDetailmap.transform.SetParent(grid);
         active = true;
     }
