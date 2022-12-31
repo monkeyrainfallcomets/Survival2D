@@ -9,9 +9,9 @@ public class WorldTemplate : ScriptableObject
     [SerializeField] NoiseMap heatMap;
     [SerializeField] NoiseMap heightMap;
     [SerializeField] TileGroup[] tileGroups;
-    public void PlaceTile(Chunk chunk, Vector2Int position)
+    public TileBase PlaceTile(Chunk chunk, Vector2Int position)
     {
-        SelectTile(chunk, position).Place(chunk, position);
+        return SelectTile(chunk, position).Place(chunk, position);
     }
     Placement SelectTile(Chunk chunk, Vector2Int position)
     {

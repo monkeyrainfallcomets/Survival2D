@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 [System.Serializable]
 public class Placement
 {
@@ -21,8 +22,8 @@ public class Placement
         }
         return false;
     }
-    public void Place(Chunk chunk, Vector2Int position)
+    public TileBase Place(Chunk chunk, Vector2Int position)
     {
-        tile.Place(chunk, position);
+        return tile.Place(chunk, position);
     }
 }
