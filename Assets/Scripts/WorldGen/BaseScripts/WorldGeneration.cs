@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using System;
+
 public class WorldGeneration : MonoBehaviour
 {
     public static event EventHandler<ChunkEvent> ChunkGenerating;
@@ -28,7 +29,7 @@ public class WorldGeneration : MonoBehaviour
     bool chunkGenerating = false;
     void Start()
     {
-        GenerateWorld(worlds[UnityEngine.Random.Range(0, worlds.Length)], player, nonTraversable, UnityEngine.Random.Range(0, 9999999));
+        GenerateWorld(worlds[UnityEngine.Random.Range(0, worlds.Length)], player, nonTraversable, UnityEngine.Random.Range(0, 999999999));
     }
     void Update()
     {
@@ -95,7 +96,7 @@ public class WorldGeneration : MonoBehaviour
         while (spawnPoints.Count <= requiredSpawnPoints)
         {
             position = new Vector2Int(x, y);
-            spawnPoints.AddRange(GenerateStartingChunk(position, nonTraversable));
+            spawnPoints.AddRange(GenerateStartingChunk(position, nonTraversable, ));
             visibleChunks.Add(position);
             x++;
             if (x >= iterations)
@@ -123,27 +124,25 @@ public class WorldGeneration : MonoBehaviour
         Vector2Int chosenPosition = spawnPoints[UnityEngine.Random.Range(0, spawnPoints.Count)];
         playerPosition = new Vector3(chosenPosition.x, chosenPosition.y, 0);
         player.position = playerPosition;
-        StartCoroutine("ChunkUpdate");
-        updateCycle = true;
+        //StartCoroutine("ChunkUpdate");
+        //updateCycle = true;
     }
-    //the return type of both of these methods is possible positions for the player
-    List<Vector2Int> GenerateStartingChunk(Vector2Int chunkPosition, TileBase[] nonTraversable)
+    //this overloaded version will add possible player spawn locations
+    void GenerateChunk(Vector2Int chunkPosition, TileBase[] nonTraversable)
     {
+        System.Random random = new System.Random();
         Vector2Int worldPosition = new Vector2Int(chunkPosition.x * chunkSize.x, chunkPosition.y * chunkSize.y);
         Chunk chunk = new Chunk(world, chunkPrefab, grid, worldPosition);
-        List<Vector2Int> playerLocations = FillChunkTiles(chunk, true, nonTraversable);
-        chunks.Add(chunkPosition, chunk);
-        return playerLocations;
-    }
-    void GenerateChunk(Vector2Int chunkPosition)
-    {
-        Vector2Int worldPosition = new Vector2Int(chunkPosition.x * chunkSize.x, chunkPosition.y * chunkSize.y);
-        Chunk chunk = new Chunk(world, chunkPrefab, grid, worldPosition);
-        FillChunkTiles(chunk, false, new TileBase[0]);
+        FillChunkTiles(chunk, true, new TileBase[0]);
         chunks.Add(chunkPosition, chunk);
     }
 
-    List<Vector2Int> FillChunkTiles(Chunk chunk, bool initialChunk, TileBase[] nonTraversable)
+    void GenerateChunk(Vector2Int chunkPosition)
+    {
+
+    }
+
+    void FillChunkTiles(Chunk chunk, bool findSpawnLocations, TileBase[] nonTraversable)
     {
         List<Vector2Int> playerLocations = new List<Vector2Int>();
         Vector2Int tilePosition = Vector2Int.zero;
@@ -155,7 +154,7 @@ public class WorldGeneration : MonoBehaviour
             {
                 tilePosition = new Vector2Int(x, y);
                 tile = chunk.CurrentWorld().PlaceTile(chunk, tilePosition + chunk.GetPosition());
-                if (initialChunk)
+                if (findSpawnLocations)
                 {
                     traversable = true;
                     for (int i = 0; i < nonTraversable.Length; i++)
@@ -185,4 +184,28 @@ public class WorldGeneration : MonoBehaviour
     }
 }
 
+public class Test
+{
+    [SerializeFeild] Joystick joystick;
+    Vector2 moveInput;
 
+    void Update()
+    {
+        moveInput = joystick.GetAxis();
+        if (moveInput != Vector2.zero)
+        {
+            if (!joystick.gameObject.activeSelf)
+            {
+                joystick.gameObject.SetActive(true);
+            }
+        }
+        else
+        {
+            if (joystick.gameObject.activeSelf)
+            {
+                joystick.gameObject.SetActive(false);
+            }
+        }
+    }
+
+}
