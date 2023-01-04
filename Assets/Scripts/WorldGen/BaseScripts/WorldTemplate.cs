@@ -9,11 +9,11 @@ public class WorldTemplate : ScriptableObject
     [SerializeField] NoiseMap heatMap;
     [SerializeField] NoiseMap heightMap;
     [SerializeField] TileGroup[] tileGroups;
-    public TileBase PlaceTile(Chunk chunk, Vector2Int position)
+    public void PlaceTile(Chunk chunk, Vector2Int position)
     {
-        return SelectTile(chunk, position).Place(chunk, position);
+        SelectTile(chunk, position).Place(chunk, position);
     }
-    Placement SelectTile(Chunk chunk, Vector2Int position)
+    public TilePlacement SelectTile(Chunk chunk, Vector2Int position)
     {
         float moistureValue = chunk.CurrentWorld().moistureMap.GetValue(position);
         float heatValue = chunk.CurrentWorld().heatMap.GetValue(position);
@@ -39,14 +39,14 @@ public class WorldTemplate : ScriptableObject
     {
         [SerializeField] RangeF heatValue;
         [SerializeField] RangeF moistureValue;
-        [SerializeField] Placement[] tiles;
+        [SerializeField] TilePlacement[] tiles;
 
         public bool WithinRange(float heat, float moisture)
         {
             return heatValue.WithinRange(heat) && moistureValue.WithinRange(moisture);
         }
 
-        public Placement GetTile(float heat, float moisture, float height)
+        public TilePlacement GetTile(float heat, float moisture, float height)
         {
             for (int i = 0; i < tiles.Length; i++)
             {
@@ -57,7 +57,7 @@ public class WorldTemplate : ScriptableObject
             }
             return GetLastTile();
         }
-        public Placement GetLastTile()
+        public TilePlacement GetLastTile()
         {
             return tiles[tiles.Length - 1];
         }

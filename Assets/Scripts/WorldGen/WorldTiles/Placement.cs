@@ -5,7 +5,6 @@ using UnityEngine.Tilemaps;
 [System.Serializable]
 public class Placement
 {
-    [SerializeField] WorldTile tile;
     [SerializeField] RangeF heatValue;
     [SerializeField] RangeF moistureValue;
     [SerializeField] RangeF heightValue;
@@ -22,8 +21,7 @@ public class Placement
         }
         return false;
     }
-    public TileBase Place(Chunk chunk, Vector2Int position)
+    public virtual void Place(Chunk chunk, Vector2Int position)
     {
-        return tile.Place(chunk, position);
     }
 }

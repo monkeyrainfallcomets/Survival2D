@@ -28,6 +28,27 @@ public class Chunk
         chunk.SetParent(grid);
         active = true;
     }
+
+    public Chunk(WorldTemplate world, Vector2Int position)
+    {
+        this.world = world;
+        this.position = position;
+        active = true;
+    }
+
+    public void InstantiateChunk(WorldChunk chunkPrefab, Transform grid)
+    {
+        this.chunk = new GameObject("chunk").transform;
+        baseTilemap = MonoBehaviour.Instantiate(chunkPrefab.GetBaseTilemap(), Vector3.zero, Quaternion.identity);
+        baseTilemap.transform.SetParent(chunk);
+        detailmap = MonoBehaviour.Instantiate(chunkPrefab.GetDetailTilemap(), Vector3.zero, Quaternion.identity);
+        detailmap.transform.SetParent(chunk);
+        collisionDetailmap = MonoBehaviour.Instantiate(chunkPrefab.GetCollisionDetailmap(), Vector3.zero, Quaternion.identity);
+        Vector3 worldPosition = new Vector3(position.x, position.y, 0);
+        this.chunk.position = worldPosition;
+        collisionDetailmap.transform.SetParent(chunk);
+        chunk.SetParent(grid);
+    }
     public void PlaceTile(TileBase tile, Vector3Int position)
     {
         baseTilemap.SetTile(position, tile);

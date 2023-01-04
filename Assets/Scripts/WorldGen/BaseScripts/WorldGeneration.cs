@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using System;
-
+using System.Threading;
 public class WorldGeneration : MonoBehaviour
 {
     public static event EventHandler<ChunkEvent> ChunkGenerating;
@@ -25,6 +25,7 @@ public class WorldGeneration : MonoBehaviour
     Vector3 playerPosition;
     Vector2Int playerChunk;
     WorldTemplate world;
+    List<ChunkData> completedChunks = new List<ChunkData>();
     bool updateCycle = false;
     bool chunkGenerating = false;
     void Start()
@@ -38,6 +39,13 @@ public class WorldGeneration : MonoBehaviour
             if (!chunkGenerating)
             {
                 StartCoroutine("ChunkUpdate");
+            }
+        }
+        if (completedChunks.Count != 0)
+        {
+            for (int i = 0; i < completedChunks[0].positions.Count; i++)
+            {
+                Debug.Log(completedChunks[0].positions[i]);
             }
         }
     }
@@ -65,7 +73,7 @@ public class WorldGeneration : MonoBehaviour
                     Vector2Int position = new Vector2Int(x, y);
                     if (!chunks.ContainsKey(position))
                     {
-                        GenerateStartingChunk(position, nonTraversable);
+                        GenerateChunk(position, nonTraversable);
                     }
                     else
                     {
@@ -85,6 +93,8 @@ public class WorldGeneration : MonoBehaviour
     }
     public void GenerateWorld(WorldTemplate world, Transform player, TileBase[] nonTraversable, int seed)
     {
+        Thread thread = new Thread(new ParameterizedThreadStart(delegate { GenerateChunk(new Vector2Int(0, 0)); }));
+        thread.Start();
         this.world = world;
         UnityEngine.Random.InitState(seed);
         world.GenerateSeeds();
@@ -93,10 +103,10 @@ public class WorldGeneration : MonoBehaviour
         int iterations = 1;
         int x = 0;
         int y = 0;
-        while (spawnPoints.Count <= requiredSpawnPoints)
+        /*while (spawnPoints.Count <= requiredSpawnPoints)
         {
             position = new Vector2Int(x, y);
-            spawnPoints.AddRange(GenerateStartingChunk(position, nonTraversable, ));
+            spawnPoints.AddRange();
             visibleChunks.Add(position);
             x++;
             if (x >= iterations)
@@ -124,54 +134,63 @@ public class WorldGeneration : MonoBehaviour
         Vector2Int chosenPosition = spawnPoints[UnityEngine.Random.Range(0, spawnPoints.Count)];
         playerPosition = new Vector3(chosenPosition.x, chosenPosition.y, 0);
         player.position = playerPosition;
-        //StartCoroutine("ChunkUpdate");
-        //updateCycle = true;
+        StartCoroutine("ChunkUpdate");
+        updateCycle = true;*/
     }
+
     //this overloaded version will add possible player spawn locations
     void GenerateChunk(Vector2Int chunkPosition, TileBase[] nonTraversable)
     {
         System.Random random = new System.Random();
-        Vector2Int worldPosition = new Vector2Int(chunkPosition.x * chunkSize.x, chunkPosition.y * chunkSize.y);
-        Chunk chunk = new Chunk(world, chunkPrefab, grid, worldPosition);
-        FillChunkTiles(chunk, true, new TileBase[0]);
-        chunks.Add(chunkPosition, chunk);
     }
 
     void GenerateChunk(Vector2Int chunkPosition)
     {
-
+        Vector2Int worldPosition = new Vector2Int(chunkPosition.x * chunkSize.x, chunkPosition.y * chunkSize.y);
+        Chunk chunk = new Chunk(world, worldPosition);
+        Dictionary<TileBase, List<Vector2Int>> tiles = FillChunkTiles(chunk);
+        List<TilePosition> positions = new List<TilePosition>();
+        lock (completedChunks)
+        {
+            Debug.Log("i'm like a locksmith");
+            foreach (KeyValuePair<TileBase, List<Vector2Int>> item in tiles)
+            {
+                Debug.Log("check out this sick list");
+                for (int i = 0; i < item.Value.Count; i++)
+                {
+                    positions.Add(new TilePosition(item.Value[i], item.Key));
+                }
+            }
+            completedChunks.Add(new ChunkData(positions));
+        }
     }
 
-    void FillChunkTiles(Chunk chunk, bool findSpawnLocations, TileBase[] nonTraversable)
+    Dictionary<TileBase, List<Vector2Int>> FillChunkTiles(Chunk chunk)
     {
-        List<Vector2Int> playerLocations = new List<Vector2Int>();
+        Dictionary<TileBase, List<Vector2Int>> returnData = new Dictionary<TileBase, List<Vector2Int>>();
         Vector2Int tilePosition = Vector2Int.zero;
+        TilePlacement tilePlacement;
         TileBase tile;
-        bool traversable;
+        List<Vector2Int> currentList;
         for (int y = 0; y < chunkSize.y; y++)
         {
             for (int x = 0; x < chunkSize.x; x++)
             {
                 tilePosition = new Vector2Int(x, y);
-                tile = chunk.CurrentWorld().PlaceTile(chunk, tilePosition + chunk.GetPosition());
-                if (findSpawnLocations)
+                tilePlacement = chunk.CurrentWorld().SelectTile(chunk, tilePosition);
+                tile = tilePlacement.GetTile();
+                if (returnData.TryGetValue(tile, out currentList))
                 {
-                    traversable = true;
-                    for (int i = 0; i < nonTraversable.Length; i++)
-                    {
-                        if (nonTraversable[i] == tile)
-                        {
-                            traversable = false;
-                        }
-                    }
-                    if (traversable)
-                    {
-                        playerLocations.Add(tilePosition);
-                    }
+                    currentList.Add(tilePosition);
+                }
+                else
+                {
+                    returnData.Add(tile, new List<Vector2Int>() { tilePosition });
                 }
             }
         }
-        return playerLocations;
+
+        return returnData;
     }
 
     public Vector2Int WorldPositionToChunk(Vector3 position, bool round)
@@ -184,28 +203,23 @@ public class WorldGeneration : MonoBehaviour
     }
 }
 
-public class Test
+public struct ChunkData
 {
-    [SerializeFeild] Joystick joystick;
-    Vector2 moveInput;
+    public List<TilePosition> positions;
 
-    void Update()
+    public ChunkData(List<TilePosition> positions)
     {
-        moveInput = joystick.GetAxis();
-        if (moveInput != Vector2.zero)
-        {
-            if (!joystick.gameObject.activeSelf)
-            {
-                joystick.gameObject.SetActive(true);
-            }
-        }
-        else
-        {
-            if (joystick.gameObject.activeSelf)
-            {
-                joystick.gameObject.SetActive(false);
-            }
-        }
+        this.positions = positions;
     }
+}
 
+public struct TilePosition
+{
+    public Vector2Int position;
+    public TileBase tile;
+    public TilePosition(Vector2Int position, TileBase tile)
+    {
+        this.tile = tile;
+        this.position = position;
+    }
 }
