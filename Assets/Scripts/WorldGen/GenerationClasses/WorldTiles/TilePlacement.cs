@@ -7,9 +7,9 @@ using UnityEngine.Tilemaps;
 public class TilePlacement : Placement
 {
     [SerializeField] TileBase tile;
-    public override void Place(Chunk chunk, Vector2Int position)
+    public override void Place(WorldInstance chunk, Vector2Int position)
     {
-        base.Place(chunk, position);
+
     }
 
     public TileBase GetTile()

@@ -9,15 +9,13 @@ public class WorldTemplate : ScriptableObject
     [SerializeField] NoiseMap heatMap;
     [SerializeField] NoiseMap heightMap;
     [SerializeField] TileGroup[] tileGroups;
-    public void PlaceTile(Chunk chunk, Vector2Int position)
+    [SerializeField] SerializableDictionary<TileBase, DetailGroup[]> detailGroups;
+
+    public TilePlacement SelectTile(Vector2Int position)
     {
-        SelectTile(chunk, position).Place(chunk, position);
-    }
-    public TilePlacement SelectTile(Chunk chunk, Vector2Int position)
-    {
-        float moistureValue = chunk.CurrentWorld().moistureMap.GetValue(position);
-        float heatValue = chunk.CurrentWorld().heatMap.GetValue(position);
-        float heightValue = chunk.CurrentWorld().heightMap.GetValue(position);
+        float moistureValue = moistureMap.GetValue(position);
+        float heatValue = heatMap.GetValue(position);
+        float heightValue = heightMap.GetValue(position);
         for (int i = 0; i < tileGroups.Length; i++)
         {
             if (tileGroups[i].WithinRange(heatValue, moistureValue))
@@ -27,6 +25,14 @@ public class WorldTemplate : ScriptableObject
         }
         return tileGroups[tileGroups.Length - 1].GetLastTile();
     }
+
+    public Placement SelectDetail(Vector2Int position)
+    {
+        float moistureValue = moistureMap.GetValue(position);
+        float heatValue = heatMap.GetValue(position);
+        float heightValue = heightMap.GetValue(position);
+
+    }
     public void GenerateSeeds()
     {
         moistureMap.GenerateRandomSeed();
@@ -35,31 +41,40 @@ public class WorldTemplate : ScriptableObject
     }
 
     [System.Serializable]
-    public struct TileGroup
+    public class TileGroup : PlacementGroup<TilePlacement>
+    {
+
+    }
+
+    public class DetailGroup : PlacementGroup<Placement>
+    {
+        [SerializeField]
+    }
+
+    public class PlacementGroup<PlacementType> where PlacementType : Placement
     {
         [SerializeField] RangeF heatValue;
         [SerializeField] RangeF moistureValue;
-        [SerializeField] TilePlacement[] tiles;
-
+        [SerializeField] PlacementType[] placements;
         public bool WithinRange(float heat, float moisture)
         {
             return heatValue.WithinRange(heat) && moistureValue.WithinRange(moisture);
         }
 
-        public TilePlacement GetTile(float heat, float moisture, float height)
+        public PlacementType GetTile(float heat, float moisture, float height)
         {
-            for (int i = 0; i < tiles.Length; i++)
+            for (int i = 0; i < placements.Length; i++)
             {
-                if (tiles[i].CanPlace(heat, moisture, height))
+                if (placements[i].CanPlace(heat, moisture, height))
                 {
-                    return tiles[i];
+                    return placements[i];
                 }
             }
             return GetLastTile();
         }
-        public TilePlacement GetLastTile()
+        public PlacementType GetLastTile()
         {
-            return tiles[tiles.Length - 1];
+            return placements[placements.Length - 1];
         }
     }
 }

@@ -5,7 +5,6 @@ using UnityEngine.Tilemaps;
 public class TileCommunicator : MonoBehaviour
 {
     [SerializeField] Tilemap tilemap;
-    [SerializeField] WorldChunk chunk;
     public Tilemap GetMap()
     {
         return tilemap;

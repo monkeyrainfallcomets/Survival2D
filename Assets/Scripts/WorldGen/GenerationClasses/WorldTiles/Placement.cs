@@ -12,7 +12,7 @@ public class Placement
     {
         return heatValue.WithinRange(heat) && moistureValue.WithinRange(moisture) && heightValue.WithinRange(height);
     }
-    public bool TryPlacing(float heat, float moisture, float height, Chunk chunk, Vector2Int position)
+    public bool TryPlacing(float heat, float moisture, float height, WorldInstance chunk, Vector2Int position)
     {
         if (CanPlace(heat, moisture, height))
         {
@@ -21,7 +21,7 @@ public class Placement
         }
         return false;
     }
-    public virtual void Place(Chunk chunk, Vector2Int position)
+    public virtual void Place(WorldInstance chunk, Vector2Int position)
     {
     }
 }
