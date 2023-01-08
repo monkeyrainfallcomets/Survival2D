@@ -5,7 +5,10 @@ using UnityEngine.Tilemaps;
 [System.Serializable]
 public struct WorldTile
 {
-    public Placement detail;
+    public float moistureValue;
+    public float heatValue;
+    public float heightValue;
+    public PlacementInstance detail;
     public TileBase tile;
     public Structure structure;
 }

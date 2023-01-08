@@ -9,7 +9,7 @@ public class WorldTemplate : ScriptableObject
     [SerializeField] NoiseMap heatMap;
     [SerializeField] NoiseMap heightMap;
     [SerializeField] TileGroup[] tileGroups;
-    [SerializeField] SerializableDictionary<TileBase, DetailGroup[]> detailGroups;
+    [SerializeField] SerializableDictionary<TileBase, RandomPlacementGroup<Placement>[]> detailGroups;
 
     public TilePlacement SelectTile(Vector2Int position)
     {
@@ -20,18 +20,36 @@ public class WorldTemplate : ScriptableObject
         {
             if (tileGroups[i].WithinRange(heatValue, moistureValue))
             {
-                return tileGroups[i].GetTile(heatValue, moistureValue, heightValue);
+                return tileGroups[i].GetPlacement(heatValue, moistureValue, heightValue);
             }
         }
-        return tileGroups[tileGroups.Length - 1].GetLastTile();
+        return tileGroups[tileGroups.Length - 1].GetLastPlacement();
     }
 
-    public Placement SelectDetail(Vector2Int position)
+    public bool SelectDetail(Vector2Int position, TileBase tile, out Placement placement)
     {
         float moistureValue = moistureMap.GetValue(position);
         float heatValue = heatMap.GetValue(position);
         float heightValue = heightMap.GetValue(position);
+        int valueAverage = (int)(((heightValue + heatValue + moistureValue) * 100) / 3);
+        int randomSeed = valueAverage * (position.x * position.y);
+        System.Random random = new System.Random(randomSeed);
+        RandomPlacementGroup<Placement>[] details;
 
+        if (detailGroups.TryGetValue(tile, out details))
+        {
+            for (int i = 0; i < details.Length; i++)
+            {
+                if (details[i].TrySelectPlacement(random, out placement, moistureValue, heatValue, heightValue))
+                {
+                    return true;
+                }
+            }
+            placement = details[details.Length - 1].GetLastPlacement();
+            return true;
+        }
+        placement = null;
+        return false;
     }
     public void GenerateSeeds()
     {
@@ -40,43 +58,7 @@ public class WorldTemplate : ScriptableObject
         heatMap.GenerateRandomSeed();
     }
 
-    [System.Serializable]
-    public class TileGroup : PlacementGroup<TilePlacement>
-    {
 
-    }
-
-    public class DetailGroup : PlacementGroup<Placement>
-    {
-        [SerializeField]
-    }
-
-    public class PlacementGroup<PlacementType> where PlacementType : Placement
-    {
-        [SerializeField] RangeF heatValue;
-        [SerializeField] RangeF moistureValue;
-        [SerializeField] PlacementType[] placements;
-        public bool WithinRange(float heat, float moisture)
-        {
-            return heatValue.WithinRange(heat) && moistureValue.WithinRange(moisture);
-        }
-
-        public PlacementType GetTile(float heat, float moisture, float height)
-        {
-            for (int i = 0; i < placements.Length; i++)
-            {
-                if (placements[i].CanPlace(heat, moisture, height))
-                {
-                    return placements[i];
-                }
-            }
-            return GetLastTile();
-        }
-        public PlacementType GetLastTile()
-        {
-            return placements[placements.Length - 1];
-        }
-    }
 }
 
 
