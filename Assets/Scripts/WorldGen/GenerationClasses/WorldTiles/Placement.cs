@@ -21,16 +21,48 @@ public class Placement
         }
         return false;
     }
-    public virtual void Place(WorldInstance chunk, Vector2Int position)
+    public virtual PlacementInstance Place(WorldInstance world, Vector2Int position)
     {
+        return new PlacementInstance();
     }
 }
+
+[System.Serializable]
+public class TilePlacement : Placement
+{
+    [SerializeField] TileBase tile;
+    [SerializeField] WorldInstance.Map map;
+    public override PlacementInstance Place(WorldInstance world, Vector2Int position)
+    {
+        Tilemap tilemap = world.GetMap(map);
+        tilemap.SetTile((Vector3Int)position, tile);
+        return new TilePlacementInstance(tilemap, (Vector3Int)position);
+    }
+
+    public TileBase GetTile()
+    {
+        return tile;
+    }
+}
+
+public class GameObjectPlacement : Placement
+{
+    [SerializeField] GameObject gameObject;
+    public override PlacementInstance Place(WorldInstance world, Vector2Int position)
+    {
+        return new GoPlacementInstance(MonoBehaviour.Instantiate(gameObject, new Vector3(position.x, position.y, 0), Quaternion.identity));
+    }
+}
+
 
 [System.Serializable]
 public class TileGroup : PlacementGroup<TilePlacement>
 {
 
 }
+
+
+
 [System.Serializable]
 public class RandomPlacementGroup<PlacementType> where PlacementType : Placement
 {
@@ -87,15 +119,42 @@ public class PlacementGroup<PlacementType> where PlacementType : Placement
     }
 }
 
+public class GoPlacementInstance : PlacementInstance
+{
+    GameObject gameObject;
+    public GoPlacementInstance(GameObject gameObject)
+    {
+        this.gameObject = gameObject;
+    }
+    public override void Destroy()
+    {
+        MonoBehaviour.Destroy(gameObject);
+    }
+}
+
+public class TilePlacementInstance : PlacementInstance
+{
+    Vector3Int position;
+    Tilemap tilemap;
+    public TilePlacementInstance(Tilemap tilemap, Vector3Int position)
+    {
+        this.position = position;
+        this.tilemap = tilemap;
+    }
+
+    public override void Destroy()
+    {
+        tilemap.SetTile(position, null);
+    }
+}
+
 public class PlacementInstance
 {
-    public PlacementInstance()
+    public virtual void Destroy()
     {
 
     }
-    public void Destroy()
-    {
-
-    }
-
 }
+
+
+
