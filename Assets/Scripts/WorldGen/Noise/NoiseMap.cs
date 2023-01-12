@@ -23,7 +23,7 @@ public class NoiseMap : ScriptableObject
         for (int i = 0; i < octaves; i++)
         {
             float sampleX = (coordinates.x + seed) / scale.x * frequency;
-            float sampleY = (coordinates.y + seed) / scale.x * frequency;
+            float sampleY = (coordinates.y + seed) / scale.y * frequency;
             float octaveNoiseValue = Mathf.PerlinNoise(sampleX, sampleY);
             noiseValue += octaveNoiseValue * amplitude;
             amplitude *= persistancy;

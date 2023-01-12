@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 643328698801458515}
-  - component: {fileID: 643328698801458514}
+  - component: {fileID: 2890851165211756808}
   m_Layer: 0
   m_Name: Chunk
   m_TagString: Untagged
@@ -35,7 +35,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &643328698801458514
+--- !u!114 &2890851165211756808
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -44,12 +44,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 643328698801458513}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf4a1dc8066954c50a1da9dff69a561a, type: 3}
+  m_Script: {fileID: 11500000, guid: 18817e1a001474980bcfc373f28f4016, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseTilemap: {fileID: 643328698993399237}
-  detailTilemap: {fileID: 643328699776526686}
-  collisionDetailmap: {fileID: 643328700821102407}
+  tilemaps:
+    list:
+    - Key: 0
+      Value: {fileID: 643328700821102407}
+    - Key: 1
+      Value: {fileID: 643328698993399237}
+    - Key: 2
+      Value: {fileID: 643328699776526686}
 --- !u!1 &643328698993399236
 GameObject:
   m_ObjectHideFlags: 0
@@ -200,7 +205,7 @@ GameObject:
   - component: {fileID: 643328699776526656}
   - component: {fileID: 643328699776526687}
   m_Layer: 0
-  m_Name: Tilemap (1)
+  m_Name: CollisionTilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -337,7 +342,7 @@ GameObject:
   - component: {fileID: 643328700821102409}
   - component: {fileID: 643328700821102408}
   m_Layer: 0
-  m_Name: Tilemap (2)
+  m_Name: Detail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

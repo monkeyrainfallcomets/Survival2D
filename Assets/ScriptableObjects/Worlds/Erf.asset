@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9cb0dcd6874584c6b96905492d78a37a, type: 3}
-  m_Name: Earth
+  m_Name: Erf
   m_EditorClassIdentifier: 
   moistureMap: {fileID: 11400000, guid: c4befc2fbee04433893bf7e297f47447, type: 2}
   heatMap: {fileID: 11400000, guid: b729b521339ac4402ab2f2343011d7e9, type: 2}
@@ -18,18 +18,18 @@ MonoBehaviour:
   tileGroups:
   - heatValue:
       min: 0
-      max: 0
+      max: 1
     moistureValue:
       min: 0
-      max: 0
-    tiles:
+      max: 1
+    placements:
     - heatValue:
         min: 0
-        max: 0
+        max: 1
       moistureValue:
         min: 0
-        max: 0
+        max: 1
       heightValue:
         min: 0
-        max: 0
-      tile: {fileID: 11400000, guid: 07d9a799d5bb64168b8684677762bf7b, type: 2}
+        max: 1
+      placement: {fileID: 11400000, guid: 2902982133fb24ff581cf77c81804055, type: 2}

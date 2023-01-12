@@ -167,21 +167,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87c1e6415fa4d474690ffb8033f92ee4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chunkPrefab: {fileID: 643328698801458514, guid: 25aeb8dc728ad47fd946ded8bdd577c0, type: 3}
+  chunkPrefab: {fileID: 2890851165211756808, guid: 25aeb8dc728ad47fd946ded8bdd577c0, type: 3}
   worlds:
-  - {fileID: 11400000, guid: ca03d9d721d73441eb93f520c001a3c5, type: 2}
-  playerPrefabs:
-  - {fileID: 0}
-  grid: {fileID: 8723279562353128043}
-  chunkSize: {x: 20, y: 20}
-  maxActiveChunks: 100
-  player: {fileID: 1132284691}
+  - {fileID: 11400000, guid: 3c6d1c7b4c1d14aa29836c06a8b66046, type: 2}
   nonTraversable:
   - {fileID: 11400000, guid: 2ca54831e406b4905b20765b32da8eb5, type: 2}
   - {fileID: 11400000, guid: cbaae317e16274e1ea358e538420795d, type: 2}
-  requiredSpawnPoints: 1000
-  viewDistance: 2
-  despawnDistance: 5
+  requiredSpawnPoints: 94
+  worldGenData:
+    player: {fileID: 0}
+    viewDistance: {x: 0, y: 0}
+    worldTemplate: {fileID: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -357,7 +353,7 @@ MonoBehaviour:
         frames:
         - texture: {fileID: 2800000, guid: 3ee5e8d79d8894036844e2314ae56a47, type: 3}
         - texture: {fileID: 2800000, guid: debcbb1960b4a4d248379a344f858d0e, type: 3}
-  scale: 5
+  scale: 4
   state: 0
   dexter: {fileID: 2800000, guid: db4d39af276764d2cba7feecc9460500, type: 3}
 --- !u!212 &1132284693

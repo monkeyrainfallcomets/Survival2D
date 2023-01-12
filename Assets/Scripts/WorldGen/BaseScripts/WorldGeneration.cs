@@ -17,18 +17,25 @@ public class WorldGeneration : MonoBehaviour
 
     public void Start()
     {
-
+        GenerateWorld(999, worlds[UnityEngine.Random.Range(0, worlds.Length)]);
     }
 
     public void GenerateWorld(int seed, WorldTemplate world)
     {
-
+        worldInstance = Instantiate(chunkPrefab);
+        worldGenData.worldTemplate = world;
+        worldInstance.Initialize(worldGenData);
+        this.world = world;
+        WorldTile tile = worldInstance.GenerateWorldTile(new Vector2Int(0, 0));
+        tile.Place(worldInstance);
     }
 
     public void EndGeneration()
     {
         worldInstance.End();
     }
+
+
 }
 
 [System.Serializable]
