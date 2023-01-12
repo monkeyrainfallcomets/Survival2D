@@ -57,96 +57,10 @@ public class Entity : MonoBehaviour
     {
         return baseTypeMatchups;
     }
-    public Effectiveness GetEffectiveness(DamageTypes damageType)
+
+    public TypeMatchups GetTypeMatchups()
     {
-        for (int i = 0; i < typeMatchups.weaknesses.Length; i++)
-        {
-            if (typeMatchups.weaknesses[i].type == damageType)
-            {
-                return Effectiveness.VeryEffective;
-            }
-        }
-
-        for (int i = 0; i < typeMatchups.resistances.Length; i++)
-        {
-            if (typeMatchups.resistances[i].type == damageType)
-            {
-                return Effectiveness.NotVeryEffective;
-            }
-        }
-
-        for (int i = 0; i < typeMatchups.immunities.Length; i++)
-        {
-            if (typeMatchups.immunities[i] == damageType)
-            {
-                return Effectiveness.NoEffect;
-            }
-        }
-        return Effectiveness.Effective;
-    }
-
-    public float DamageMultiplier(DamageTypes damageType)
-    {
-        for (int i = 0; i < typeMatchups.weaknesses.Length; i++)
-        {
-            if (typeMatchups.weaknesses[i].type == damageType)
-            {
-                return typeMatchups.weaknesses[i].multiplier;
-            }
-        }
-
-        for (int i = 0; i < typeMatchups.resistances.Length; i++)
-        {
-            if (typeMatchups.resistances[i].type == damageType)
-            {
-                return 1 / typeMatchups.resistances[i].multiplier;
-            }
-        }
-
-        for (int i = 0; i < typeMatchups.immunities.Length; i++)
-        {
-            if (typeMatchups.immunities[i] == damageType)
-            {
-                return 0f;
-            }
-        }
-        return 1f;
-    }
-
-    public bool IsImmune(DamageTypes damageType)
-    {
-        for (int i = 0; i < typeMatchups.immunities.Length; i++)
-        {
-            if (typeMatchups.immunities[i] == damageType)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public bool IsVeryEffective(DamageTypes damageType)
-    {
-        for (int i = 0; i < typeMatchups.resistances.Length; i++)
-        {
-            if (typeMatchups.immunities[i] == damageType)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public bool Resists(DamageTypes damageType)
-    {
-        for (int i = 0; i < typeMatchups.resistances.Length; i++)
-        {
-            if (typeMatchups.immunities[i] == damageType)
-            {
-                return true;
-            }
-        }
-        return false;
+        return typeMatchups;
     }
 
     public bool TrySwapMovementState(MovementType movementType)
@@ -180,16 +94,8 @@ public class Entity : MonoBehaviour
     [System.Serializable]
     public struct TypeMultipliers
     {
-        public DamageTypes type;
+        public Effectiveness effectiveness;
         public float multiplier;
-    }
-
-    [System.Serializable]
-    public struct TypeMatchups
-    {
-        public TypeMultipliers[] weaknesses;
-        public TypeMultipliers[] resistances;
-        public DamageTypes[] immunities;
     }
 
     public struct MovementState
@@ -203,7 +109,10 @@ public class Entity : MonoBehaviour
         public MovementState baseState;
         public MovementState[] states;
     }
+
+
 }
+
 
 
 public enum DamageTypes
@@ -212,15 +121,17 @@ public enum DamageTypes
     Water,
     Nature,
     Poison,
-    Physical
+    Physical,
+    None
 }
 
 public enum Effectiveness
 {
-    VeryEffective,
-    Effective,
-    NotVeryEffective,
-    NoEffect
+    ExtremelyEffective = 4,
+    VeryEffective = 3,
+    Effective = 2,
+    NotVeryEffective = 1,
+    BarelyEffective = 0
 }
 
 public enum MovementType

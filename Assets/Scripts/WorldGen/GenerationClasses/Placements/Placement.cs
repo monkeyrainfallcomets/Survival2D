@@ -5,11 +5,11 @@ using UnityEngine.Tilemaps;
 
 public class Placement : ScriptableObject
 {
-    public virtual PlacementInstance Place(WorldInstance world, Vector2Int position)
+    public virtual PlacementInstance Place(WorldInstance world, Vector2Int position, NoiseValue noiseValues)
     {
         return new PlacementInstance();
     }
-    public virtual bool IsTraversable(TileBase[] nonTraversable)
+    public virtual bool IsTraversable(Entity entity)
     {
         return true;
     }

@@ -27,7 +27,6 @@ public class WorldGeneration : MonoBehaviour
         worldInstance.Initialize(worldGenData);
         this.world = world;
         WorldTile tile = worldInstance.GenerateWorldTile(new Vector2Int(0, 0));
-        tile.Place(worldInstance);
     }
 
     public void EndGeneration()

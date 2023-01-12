@@ -40,19 +40,19 @@ public class WorldTile
         this.structure = null;
     }
 
-    public bool Traversable(TileBase[] nonTraversable)
+    public bool Traversable(Entity entity)
     {
-        if (tile != null && !tile.IsTraversable(nonTraversable))
+        if (tile != null && !tile.IsTraversable(entity))
         {
             return false;
         }
-        if (detail != null && !detail.IsTraversable(nonTraversable))
+        if (detail != null && !detail.IsTraversable(entity))
         {
             return false;
         }
         return true;
     }
-    public void Place(WorldInstance world)
+    public void Place(WorldInstance world, NoiseValue noiseValues)
     {
         if (!placed)
         {
@@ -60,11 +60,11 @@ public class WorldTile
         }
         if (tile)
         {
-            tileInstance = tile.Place(world, position);
+            tileInstance = tile.Place(world, position, noiseValues);
         }
         if (detail)
         {
-            detailInstance = detail.Place(world, position);
+            detailInstance = detail.Place(world, position, noiseValues);
         }
     }
 

@@ -27,7 +27,7 @@ public class WorldInstance : MonoBehaviour
     {
         NoiseValue noiseValues = genData.worldTemplate.GetNoiseValues(position);
         TilePlacement tile = genData.worldTemplate.SelectTile(position, noiseValues);
-        tile.Place(this, position);
+        tile.Place(this, position, noiseValues);
         Placement detail;
         if (tile.SelectDetail(position, out detail, noiseValues))
         {

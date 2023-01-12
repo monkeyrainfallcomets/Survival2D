@@ -7,12 +7,20 @@ using UnityEngine.Tilemaps;
 public class TilePlacement : Placement
 {
     [SerializeField] RandomNoiseGroup<Placement> details;
-    [SerializeField] TileBase tile;
+    [SerializeField] RandomNoiseGroup<TileBase> tiles;
+    [SerializeField] DamageTypes tileType;
     [SerializeField] WorldInstance.Map map;
-    public override PlacementInstance Place(WorldInstance world, Vector2Int position)
+
+    public override PlacementInstance Place(WorldInstance world, Vector2Int position, NoiseValue noiseValues)
     {
         Tilemap tilemap = world.GetMap(map);
-        tilemap.SetTile((Vector3Int)position, tile);
+        int valueAverage = (int)(((noiseValues.heightValue + noiseValues.heatValue + noiseValues.moistureValue) * 100) / 3);
+        int randomSeed = (valueAverage * (position.x * position.y));
+        System.Random random = new System.Random(randomSeed);
+        double randomNum = random.NextDouble();
+        TileBase tileBase;
+        tiles.TrySelectPlacement(randomNum, out tileBase, noiseValues);
+        tilemap.SetTile((Vector3Int)position, tileBase);
         return new TilePlacementInstance(tilemap, (Vector3Int)position);
     }
 
@@ -31,7 +39,7 @@ public class TilePlacement : Placement
         placement = null;
         return false;
     }
-    public override bool IsTraversable(TileBase[] nonTraversable)
+    public override bool IsTraversable(Entity entity)
     {
         if (map == WorldInstance.Map.Collision)
         {
@@ -39,12 +47,9 @@ public class TilePlacement : Placement
         }
         else if (map == WorldInstance.Map.Base)
         {
-            for (int i = 0; i < nonTraversable.Length; i++)
+            if (entity.GetTypeMatchups().GetEffectiveness(tileType) == Effectiveness.VeryEffective)
             {
-                if (tile == nonTraversable[i])
-                {
-                    return false;
-                }
+                return false;
             }
         }
         return true;
