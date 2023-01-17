@@ -10,7 +10,7 @@ public class NoiseMap : ScriptableObject
     [SerializeField] float persistancy;
     [SerializeField] int octaves;
     [SerializeField] int seed;
-    public float GenerateRandomSeed()
+    public int GenerateRandomSeed()
     {
         seed = Random.Range(0, 9999999);
         return seed;
@@ -29,6 +29,6 @@ public class NoiseMap : ScriptableObject
             amplitude *= persistancy;
             frequency *= lacunarity;
         }
-        return noiseValue;
+        return Mathf.Clamp(noiseValue, 0f, 1f);
     }
 }

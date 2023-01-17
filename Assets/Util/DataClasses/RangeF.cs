@@ -20,6 +20,6 @@ public struct RangeF
 
     public bool WithinRange(float num)
     {
-        return num > min && num < max;
+        return num >= min && num <= max;
     }
 }

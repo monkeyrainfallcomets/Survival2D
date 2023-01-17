@@ -170,14 +170,13 @@ MonoBehaviour:
   chunkPrefab: {fileID: 2890851165211756808, guid: 25aeb8dc728ad47fd946ded8bdd577c0, type: 3}
   worlds:
   - {fileID: 11400000, guid: 3c6d1c7b4c1d14aa29836c06a8b66046, type: 2}
-  nonTraversable:
-  - {fileID: 11400000, guid: 2ca54831e406b4905b20765b32da8eb5, type: 2}
-  - {fileID: 11400000, guid: cbaae317e16274e1ea358e538420795d, type: 2}
-  requiredSpawnPoints: 94
+  requiredSpawnPoints: 50
   worldGenData:
-    player: {fileID: 0}
-    viewDistance: {x: 0, y: 0}
+    player: {fileID: 1132284695}
+    viewDistance: {x: 250, y: 250}
+    seed: 0
     worldTemplate: {fileID: 0}
+  grid: {fileID: 8723279562353128043}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -308,6 +307,7 @@ GameObject:
   - component: {fileID: 1132284692}
   - component: {fileID: 1132284693}
   - component: {fileID: 1132284694}
+  - component: {fileID: 1132284695}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -322,15 +322,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1132284690}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.09, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: -0.5245803, y: 0.048623554, z: -0.017848969}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 519420032}
   m_Father: {fileID: 0}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!114 &1132284692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -421,6 +421,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 0.1
+--- !u!114 &1132284695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1132284690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5eef5d746b1644baaa02d81766f34bf8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainRenderer: {fileID: 1132284693}
+  baseStats:
+    maxHp: 100
+    defense: 1
+    attack: 1
+    maxStamina: 1
+    speed: 1
+  baseTypeMatchups:
+    types:
+      list:
+      - Key: 1
+        Value:
+          effectiveness: 2
+          multiplier: 1
+      - Key: 2
+        Value:
+          effectiveness: 2
+          multiplier: 1
 --- !u!1 &382444898869316676
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,0 +1,170 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e89f761310bb64aa9b896ad82a62688a, type: 3}
+  m_Name: Grass
+  m_EditorClassIdentifier: 
+  details:
+  - chance: 0.05000000074505806
+    placements:
+    - heatValue:
+        min: 0
+        max: 1
+      moistureValue:
+        min: 0
+        max: 1
+      values:
+      - heatValue:
+          min: 0
+          max: 1
+        moistureValue:
+          min: 0
+          max: 1
+        heightValue:
+          min: 0
+          max: 1
+        value: {fileID: 11400000, guid: a3a4ebc0af3a84a65bafc8d87dc58b3f, type: 2}
+  - chance: 0.10000000149011612
+    placements:
+    - heatValue:
+        min: 0
+        max: 1
+      moistureValue:
+        min: 0
+        max: 1
+      values:
+      - heatValue:
+          min: 0
+          max: 1
+        moistureValue:
+          min: 0
+          max: 1
+        heightValue:
+          min: 0
+          max: 1
+        value: {fileID: 11400000, guid: c40c372f9a02c44cbb4b315dbda71799, type: 2}
+  - chance: 0.125
+    placements:
+    - heatValue:
+        min: 0
+        max: 1
+      moistureValue:
+        min: 0
+        max: 1
+      values:
+      - heatValue:
+          min: 0
+          max: 1
+        moistureValue:
+          min: 0
+          max: 1
+        heightValue:
+          min: 0
+          max: 1
+        value: {fileID: 11400000, guid: fe42e8fa320494d65a1d93cebddd0ab0, type: 2}
+  - chance: 0.15000000596046448
+    placements:
+    - heatValue:
+        min: 0
+        max: 1
+      moistureValue:
+        min: 0
+        max: 1
+      values:
+      - heatValue:
+          min: 0
+          max: 1
+        moistureValue:
+          min: 0
+          max: 1
+        heightValue:
+          min: 0
+          max: 1
+        value: {fileID: 11400000, guid: 6e8930d450a784b148ba135274bba28e, type: 2}
+  tiles:
+  - chance: 0.25
+    placements:
+    - heatValue:
+        min: 0
+        max: 1
+      moistureValue:
+        min: 0
+        max: 1
+      values:
+      - heatValue:
+          min: 0
+          max: 1
+        moistureValue:
+          min: 0
+          max: 1
+        heightValue:
+          min: 0
+          max: 1
+        value: {fileID: 11400000, guid: fa28eb3fe88164991bb20bce20b72c1f, type: 2}
+  - chance: 0.5
+    placements:
+    - heatValue:
+        min: 0
+        max: 1
+      moistureValue:
+        min: 0
+        max: 1
+      values:
+      - heatValue:
+          min: 0
+          max: 1
+        moistureValue:
+          min: 0
+          max: 1
+        heightValue:
+          min: 0
+          max: 1
+        value: {fileID: 11400000, guid: 9a6cd58574fa5487c96fd910470fb350, type: 2}
+  - chance: 0.75
+    placements:
+    - heatValue:
+        min: 0
+        max: 1
+      moistureValue:
+        min: 0
+        max: 1
+      values:
+      - heatValue:
+          min: 0
+          max: 1
+        moistureValue:
+          min: 0
+          max: 1
+        heightValue:
+          min: 0
+          max: 1
+        value: {fileID: 11400000, guid: 03edb714925a142bf882e864646695de, type: 2}
+  - chance: 1
+    placements:
+    - heatValue:
+        min: 0
+        max: 1
+      moistureValue:
+        min: 0
+        max: 1
+      values:
+      - heatValue:
+          min: 0
+          max: 1
+        moistureValue:
+          min: 0
+          max: 1
+        heightValue:
+          min: 0
+          max: 1
+        value: {fileID: 11400000, guid: 5748bdeea18254dbb9d6abdc12a79d19, type: 2}
+  damageType: 2
+  traversability: 4

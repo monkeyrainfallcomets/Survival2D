@@ -9,11 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e969820e90eb475e82674fe781c214b, type: 3}
-  m_Name: Earth
+  m_Script: {fileID: 11500000, guid: 4a979b8d15cb0400ab2bfbf4faa85e54, type: 3}
+  m_Name: Bush
   m_EditorClassIdentifier: 
-  scale: {x: 300, y: 300}
-  lacunarity: 2
-  persistancy: 0.1
-  octaves: 5
-  seed: 6200887
+  tileType: 2
+  tile: {fileID: 11400000, guid: da2de2466b1d54e56abb8062b7b1b51c, type: 2}
+  map: 0
+  traversability: 4

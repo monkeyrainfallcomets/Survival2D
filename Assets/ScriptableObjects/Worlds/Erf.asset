@@ -21,8 +21,8 @@ MonoBehaviour:
       max: 1
     moistureValue:
       min: 0
-      max: 1
-    placements:
+      max: 0.75
+    values:
     - heatValue:
         min: 0
         max: 1
@@ -32,4 +32,21 @@ MonoBehaviour:
       heightValue:
         min: 0
         max: 1
-      placement: {fileID: 11400000, guid: 2902982133fb24ff581cf77c81804055, type: 2}
+      value: {fileID: 11400000, guid: 541bca812188d4ba795788c2c6a12d4f, type: 2}
+  - heatValue:
+      min: 0
+      max: 1
+    moistureValue:
+      min: 0.75
+      max: 1
+    values:
+    - heatValue:
+        min: 0
+        max: 1
+      moistureValue:
+        min: 0
+        max: 1
+      heightValue:
+        min: 0
+        max: 1
+      value: {fileID: 11400000, guid: c9c01d252862443f9bc28baec7e40677, type: 2}
