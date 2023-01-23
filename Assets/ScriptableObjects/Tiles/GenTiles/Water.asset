@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd45de3f3b49d49f9912fe0f98df02ce, type: 3}
   m_Name: Water
   m_EditorClassIdentifier: 
-  priority: 0
+  priority:
+    list:
+    - Key: 0
+      Value: 0
   baseTile: {fileID: 11400000, guid: 2ca54831e406b4905b20765b32da8eb5, type: 2}
   transitionPiece: {fileID: 0}

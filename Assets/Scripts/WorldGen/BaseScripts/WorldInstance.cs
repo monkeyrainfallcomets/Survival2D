@@ -48,35 +48,38 @@ public class WorldInstance : MonoBehaviour
         return tilemaps[map];
     }
 
-    void AddTransitions(Vector2Int startLocation, Vector2Int endLocation)
+    void PostGeneration(Vector2Int startLocation, Vector2Int endLocation)
     {
-        Vector2Int topPosition;
-        WorldTile top;
-        Vector2Int rightPosition;
-        WorldTile right;
-        Vector2Int tilePosition;
+        Vector2Int position;
         WorldTile tile;
-
         for (int y = startLocation.y; y <= endLocation.y; y++)
         {
             for (int x = startLocation.x; x <= endLocation.x; x++)
             {
-                topPosition = new Vector2Int(x, y + 1);
-                rightPosition = new Vector2Int(x + 1, y);
-                tilePosition = new Vector2Int(x, y);
-                if (worldTiles.TryGetValue(tilePosition, out tile))
+                position = new Vector2Int(0, 0);
+                if (worldTiles.TryGetValue(position, out tile))
                 {
-                    if (worldTiles.TryGetValue(rightPosition, out right))
-                    {
-                        tile.AddTransition((Vector3Int)rightPosition, right.GetTile(), this);
-                    }
-                    if (worldTiles.TryGetValue(topPosition, out top))
-                    {
-                        tile.AddTransition((Vector3Int)topPosition, top.GetTile(), this);
-                    }
+                    tile.AddTransition(new Vector3Int[] { new Vector3Int(position.x + 1, position.y, 0),
+                    new Vector3Int(position.x, position.y + 1, 0) }, this);
                 }
             }
         }
+    }
+    public Planet GetPlanet()
+    {
+        return genData.worldTemplate.GetPlanet();
+    }
+
+    public bool GetTile(Vector2Int position, out TilePlacementInstance tile)
+    {
+        WorldTile worldTile;
+        if (worldTiles.TryGetValue(position, out worldTile))
+        {
+            tile = worldTile.GetTile();
+            return true;
+        }
+        tile = null;
+        return false;
     }
 
     public enum Map
@@ -86,4 +89,9 @@ public class WorldInstance : MonoBehaviour
         Collision,
         Transition
     }
+}
+
+public enum Planet
+{
+    Earth
 }

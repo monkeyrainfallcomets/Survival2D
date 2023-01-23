@@ -4,9 +4,9 @@ using UnityEngine;
 [System.Serializable]
 public class NoiseObject<Type>
 {
-    [SerializeField] RangeF heatValue;
-    [SerializeField] RangeF moistureValue;
-    [SerializeField] RangeF heightValue;
+    [SerializeField] RangeF heatValue = new RangeF(0, 1);
+    [SerializeField] RangeF moistureValue = new RangeF(0, 1);
+    [SerializeField] RangeF heightValue = new RangeF(0, 1);
     [SerializeField] Type value;
 
     public bool WithinRange(NoiseValue noiseValues)

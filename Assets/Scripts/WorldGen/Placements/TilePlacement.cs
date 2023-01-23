@@ -16,10 +16,6 @@ public class TilePlacement : ScriptableObject
     {
         Tilemap tilemap = world.GetMap(WorldInstance.Map.Base);
         GenTile tile = GetTile(position, noiseValues);
-        if (tile == null)
-        {
-            Debug.Log(noiseValues.heatValue + " " + noiseValues.moistureValue + " " + noiseValues.heightValue);
-        }
         tilemap.SetTile((Vector3Int)position, tile.baseTile);
         return new TilePlacementInstance(tilemap, (Vector3Int)position, tile);
     }
@@ -37,7 +33,6 @@ public class TilePlacement : ScriptableObject
         int randomSeed = (valueAverage * (position.x * position.y));
         System.Random random = new System.Random(randomSeed);
         double randomNum = random.NextDouble();
-        Debug.Log(randomNum);
         GenTile tile;
         for (int i = 0; i < tiles.Length; i++)
         {
@@ -77,6 +72,4 @@ public class TilePlacement : ScriptableObject
         }
         return true;
     }
-
-
 }

@@ -5,6 +5,7 @@ using UnityEngine.Tilemaps;
 [CreateAssetMenu(fileName = "New World", menuName = "WorldGen/World")]
 public class WorldTemplate : ScriptableObject
 {
+    [SerializeField] Planet planet;
     [SerializeField] NoiseMap moistureMap;
     [SerializeField] NoiseMap heatMap;
     [SerializeField] NoiseMap heightMap;
@@ -42,6 +43,11 @@ public class WorldTemplate : ScriptableObject
         moistureMap.GenerateRandomSeed();
         heightMap.GenerateRandomSeed();
         heatMap.GenerateRandomSeed();
+    }
+
+    public Planet GetPlanet()
+    {
+        return planet;
     }
 }
 

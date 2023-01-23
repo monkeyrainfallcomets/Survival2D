@@ -6,7 +6,7 @@ using UnityEngine;
 public class RandomNoiseGroup<Type>
 {
     [Range(0f, 1f)]
-    [SerializeField] double chance;
+    [SerializeField] double chance = 1;
     [SerializeField] NoiseGroup<Type>[] placements;
     public bool TrySelectPlacement(double random, out Type placement, NoiseValue noiseValues)
     {

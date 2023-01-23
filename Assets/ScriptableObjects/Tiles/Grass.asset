@@ -90,7 +90,7 @@ MonoBehaviour:
           max: 1
         value: {fileID: 11400000, guid: 6e8930d450a784b148ba135274bba28e, type: 2}
   tiles:
-  - chance: 0.25
+  - chance: 1
     placements:
     - heatValue:
         min: 0

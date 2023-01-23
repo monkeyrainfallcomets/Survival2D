@@ -83,25 +83,31 @@ public class WorldTile
         }
     }
 
-    public bool AddTransition(Vector3Int adjacentPosition, TilePlacementInstance tile, WorldInstance world)
+    public bool AddTransition(Vector3Int[] positions, WorldInstance world)
     {
+        TilePlacementInstance tile;
+
         if (tileInstance != null)
         {
-            GenTile adjacentGenTile = tile.GetTile();
             GenTile genTile = tileInstance.GetTile();
-            if (genTile.baseTile != adjacentGenTile)
+            GenTile adjacentTile;
+            for (int i = 0; i < positions.Length; i++)
             {
-                if (genTile.priority > adjacentGenTile.priority)
+                if (world.GetTile((Vector2Int)positions[i], out tile))
                 {
-                    tile.AddTransition(new Vector3Int(position.x, position.y, 0), world);
+                    adjacentTile = tile.GetTile();
+                    if (genTile.GetPriority(world.GetPlanet()) > adjacentTile.GetPriority(world.GetPlanet()))
+                    {
+                        tileInstance.AddTransition(positions[i]);
+                    }
+                    else if (genTile.GetPriority(world.GetPlanet()) < adjacentTile.GetPriority(world.GetPlanet()))
+                    {
+                        tile.AddTransition(new Vector3Int(position.x, position.y, 0));
+                    }
                 }
-                else if (genTile.priority < adjacentGenTile.priority)
-                {
-                    tileInstance.AddTransition(adjacentPosition, world);
-                }
-                return true;
             }
-            return false;
+            tileInstance.MakeTransition(world);
+            return true;
         }
 
         return false;

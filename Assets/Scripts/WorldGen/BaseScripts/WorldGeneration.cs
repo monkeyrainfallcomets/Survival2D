@@ -11,6 +11,7 @@ public class WorldGeneration : MonoBehaviour
     [SerializeField] int requiredSpawnPoints;
     [SerializeField] WorldGenData worldGenData;
     [SerializeField] Transform grid;
+    [SerializeField] TileBase tile;
     Vector3 playerPosition;
     WorldTemplate world;
     WorldInstance worldInstance;
@@ -18,6 +19,7 @@ public class WorldGeneration : MonoBehaviour
     public void Start()
     {
         GenerateWorld(917595710, worlds[UnityEngine.Random.Range(0, worlds.Length)], worldGenData.player);
+
     }
 
     public void GenerateWorld(int seed, WorldTemplate world, Entity player)
@@ -78,6 +80,10 @@ public class WorldGeneration : MonoBehaviour
         worldInstance.End();
     }
 
+    public Planet CurrentPlanet()
+    {
+        return worldGenData.worldTemplate.GetPlanet();
+    }
 
 }
 
