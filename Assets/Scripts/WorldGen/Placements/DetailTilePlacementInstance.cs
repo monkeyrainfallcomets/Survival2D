@@ -6,7 +6,8 @@ public class DetailTilePlacementInstance : PlacementInstance
 {
     Vector3Int position;
     Tilemap tilemap;
-    public DetailTilePlacementInstance(Tilemap tilemap, Vector3Int position)
+    TileBase tileBase;
+    public DetailTilePlacementInstance(Tilemap tilemap, Vector3Int position, TileBase tileBase)
     {
         this.position = position;
         this.tilemap = tilemap;
@@ -15,5 +16,9 @@ public class DetailTilePlacementInstance : PlacementInstance
     public override void Destroy(WorldInstance world)
     {
         tilemap.SetTile(position, null);
+    }
+    public override void Place(WorldInstance world)
+    {
+        tilemap.SetTile(position, tileBase);
     }
 }

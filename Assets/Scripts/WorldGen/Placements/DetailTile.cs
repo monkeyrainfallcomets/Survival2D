@@ -23,12 +23,11 @@ public class DetailTile : Placement
         return true;
     }
 
-    public override PlacementInstance Place(WorldInstance world, Vector2Int position)
+    public override PlacementInstance CreateInstance(WorldInstance world, Vector2Int position)
     {
         Tilemap tilemap = world.GetMap(map);
         Vector3Int tilePosition = (Vector3Int)position;
-        tilemap.SetTile(tilePosition, tile);
-        return new DetailTilePlacementInstance(tilemap, tilePosition);
+        return new DetailTilePlacementInstance(tilemap, tilePosition, tile);
     }
 
 }

@@ -24,11 +24,10 @@ public class WorldInstance : MonoBehaviour
         for (int i = 0; i < tiles.Count; i++)
         {
             worldTiles.Add(tiles[i].GetPosition(), tiles[i]);
-            tiles[i].Place(this);
         }
         Vector2Int startLocation = new Vector2Int(spawnLocation.x - genData.viewDistance.x, spawnLocation.y - genData.viewDistance.y);
         Vector2Int endLocation = new Vector2Int(spawnLocation.x + genData.viewDistance.x, spawnLocation.y + genData.viewDistance.y);
-        AddTransitions(startLocation, endLocation);
+        Placement(startLocation, endLocation, new Vector3Int[] { Vector3Int.down, Vector3Int.right });
     }
 
     public void PlaceTile(Map map, TileBase tile, Vector3Int position)
@@ -40,7 +39,7 @@ public class WorldInstance : MonoBehaviour
     {
         NoiseValue noiseValues = genData.worldTemplate.GetNoiseValues(position);
         TilePlacement tile = genData.worldTemplate.SelectTile(position, noiseValues);
-        return new WorldTile(position, noiseValues, tile);
+        return new WorldTile(position, noiseValues, tile, this);
     }
 
     public Tilemap GetMap(Map map)
@@ -48,7 +47,7 @@ public class WorldInstance : MonoBehaviour
         return tilemaps[map];
     }
 
-    void PostGeneration(Vector2Int startLocation, Vector2Int endLocation)
+    void Placement(Vector2Int startLocation, Vector2Int endLocation, Vector3Int[] transitionDirections)
     {
         Vector2Int position;
         WorldTile tile;
@@ -59,8 +58,7 @@ public class WorldInstance : MonoBehaviour
                 position = new Vector2Int(0, 0);
                 if (worldTiles.TryGetValue(position, out tile))
                 {
-                    tile.AddTransition(new Vector3Int[] { new Vector3Int(position.x + 1, position.y, 0),
-                    new Vector3Int(position.x, position.y + 1, 0) }, this);
+                    tile.Place(this, transitionDirections);
                 }
             }
         }

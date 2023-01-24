@@ -2,24 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-[System.Serializable]
+
 public class WorldTile
 {
-    [SerializeField] Vector2Int position;
-    [SerializeField] NoiseValue noiseValues;
-    [SerializeField] TilePlacement tile;
-    [SerializeField] Placement detail;
-    [SerializeField] Structure structure;
+    Vector2Int position;
+    NoiseValue noiseValues;
+    TilePlacement tile;
+    Structure structure;
+    Placement detail;
     bool placed;
     PlacementInstance detailInstance;
     TilePlacementInstance tileInstance;
 
-    public WorldTile(Vector2Int position, NoiseValue noiseValues, TilePlacement tile)
+    public WorldTile(Vector2Int position, NoiseValue noiseValues, TilePlacement tile, WorldInstance world)
     {
         this.position = position;
         this.noiseValues = noiseValues;
         this.tile = tile;
+        tile.CreateInstance(world, position, noiseValues);
+
         tile.SelectDetail(position, out detail, noiseValues);
+        if (detail)
+        {
+            detail.CreateInstance(world, position);
+        }
         this.structure = null;
     }
 
@@ -35,20 +41,26 @@ public class WorldTile
         }
         return true;
     }
-    public void Place(WorldInstance world)
+    public void Place(WorldInstance world, Vector3Int[] transitionLocations)
     {
         if (!placed)
         {
             placed = true;
+            TilePlacementInstance outputTile;
+            bool tileAdjusted = tile.PostGenerationAdjustments(world, out outputTile);
+            if (tileAdjusted)
+            {
+
+            }
+            bool transitionsAdded = AddTransitions(transitionLocations, world);
+
+            tileInstance.Place(world);
+            if (detail != null)
+            {
+                detailInstance.Place(world);
+            }
         }
-        if (tile != null)
-        {
-            tileInstance = tile.Place(world, position, noiseValues);
-        }
-        if (detail != null)
-        {
-            detailInstance = detail.Place(world, position);
-        }
+
     }
 
     public void Destroy(WorldInstance world)
@@ -83,7 +95,7 @@ public class WorldTile
         }
     }
 
-    public bool AddTransition(Vector3Int[] positions, WorldInstance world)
+    bool AddTransitions(Vector3Int[] positions, WorldInstance world)
     {
         TilePlacementInstance tile;
 
@@ -106,12 +118,12 @@ public class WorldTile
                     }
                 }
             }
-            tileInstance.MakeTransition(world);
             return true;
         }
 
         return false;
     }
+
     public Vector2Int GetPosition()
     {
         return position;

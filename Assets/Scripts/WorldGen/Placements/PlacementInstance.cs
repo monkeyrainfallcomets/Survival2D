@@ -8,4 +8,8 @@ public class PlacementInstance : Interactable
     {
 
     }
+    public virtual void Place(WorldInstance world)
+    {
+
+    }
 }
