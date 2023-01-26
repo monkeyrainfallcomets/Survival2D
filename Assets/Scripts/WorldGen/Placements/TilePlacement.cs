@@ -9,8 +9,9 @@ public class TilePlacement : ScriptableObject
     [SerializeField] GenTile baseTile;
     [SerializeField] RandomNoiseGroup<GenTile>[] tiles;
     [SerializeField] RandomNoiseGroup<Placement>[] details;
-    [SerializeField] TileAdjustment tileAdjustments;
+    [SerializeField] TileAdjustmentGroup[] tileAdjustments;
     [SerializeField] DamageTypes damageType;
+    [SerializeField] int zIndex;
 
     [Header("Entity's effectiveness must be less than this for it to be traversable by that entity")]
     [SerializeField] protected Effectiveness traversability;
@@ -19,7 +20,7 @@ public class TilePlacement : ScriptableObject
     {
         Tilemap tilemap = world.GetMap(WorldInstance.Map.Base);
         GenTile tile = GetTile(position, noiseValues);
-        return new TilePlacementInstance(tilemap, (Vector3Int)position, tile);
+        return new TilePlacementInstance(tilemap, new Vector3Int(position.x, position.y, zIndex), tile);
     }
 
     public TilePlacementInstance CreateInstance(GenTile tile, WorldInstance world, Vector2Int position)
@@ -66,10 +67,24 @@ public class TilePlacement : ScriptableObject
         return false;
     }
 
-    public bool PostGenerationAdjustments(WorldInstance world, out TilePlacementInstance tileInstance, Vector3Int position)
+    public bool PostGenerationAdjustments(WorldInstance world, Vector3Int position, out TilePlacementInstance tileInstance)
     {
         TilePlacementInstance[] tiles = new TilePlacementInstance[4];
-        world.GetTile(new Vector2Int(position.x - 1, position.y));
+        world.GetTile(new Vector2Int(position.x - 1, position.y), out tiles[0]);
+        world.GetTile(new Vector2Int(position.x, position.y - 1), out tiles[1]);
+        world.GetTile(new Vector2Int(position.x + 1, position.y), out tiles[2]);
+        world.GetTile(new Vector2Int(position.x, position.y + 1), out tiles[3]);
+        GenTile genTile;
+        for (int i = 0; i < tileAdjustments.Length; i++)
+        {
+            if (tileAdjustments[i].GetTile(out genTile, tiles))
+            {
+                tileInstance = new TilePlacementInstance(world.GetMap(WorldInstance.Map.Base), new Vector3Int(position.x, position.y, zIndex), genTile);
+                return true;
+            }
+        }
+        tileInstance = null;
+        return false;
     }
     public bool IsTraversable(Entity entity)
     {

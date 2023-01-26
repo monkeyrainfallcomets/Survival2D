@@ -10,6 +10,7 @@ public class DetailTile : Placement
     [SerializeField] WorldInstance.Map map;
     [Header("Entity's effectiveness must be less than this for it to be traversable by that entity")]
     [SerializeField] protected Effectiveness traversability;
+    [SerializeField] int zIndex;
     public override bool IsTraversable(Entity entity)
     {
         if (map == WorldInstance.Map.Collision)
@@ -26,7 +27,7 @@ public class DetailTile : Placement
     public override PlacementInstance CreateInstance(WorldInstance world, Vector2Int position)
     {
         Tilemap tilemap = world.GetMap(map);
-        Vector3Int tilePosition = (Vector3Int)position;
+        Vector3Int tilePosition = new Vector3Int(position.x, position.y, zIndex);
         return new DetailTilePlacementInstance(tilemap, tilePosition, tile);
     }
 

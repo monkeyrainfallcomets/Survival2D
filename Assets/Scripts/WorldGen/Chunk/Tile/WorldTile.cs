@@ -41,18 +41,18 @@ public class WorldTile
         }
         return true;
     }
-    public void Place(WorldInstance world, Vector3Int[] transitionLocations)
+    public void Place(WorldInstance world, Vector2Int[] transitionDirections)
     {
         if (!placed)
         {
             placed = true;
             TilePlacementInstance outputTile;
-            bool tileAdjusted = tile.PostGenerationAdjustments(world, out outputTile);
+            bool tileAdjusted = tile.PostGenerationAdjustments(world, (Vector3Int)position, out outputTile);
             if (tileAdjusted)
             {
-
+                tileInstance = outputTile;
             }
-            bool transitionsAdded = AddTransitions(transitionLocations, world);
+            bool transitionsAdded = AddTransitions(transitionDirections, world);
 
             tileInstance.Place(world);
             if (detail != null)
@@ -60,7 +60,6 @@ public class WorldTile
                 detailInstance.Place(world);
             }
         }
-
     }
 
     public void Destroy(WorldInstance world)
@@ -95,7 +94,7 @@ public class WorldTile
         }
     }
 
-    bool AddTransitions(Vector3Int[] positions, WorldInstance world)
+    bool AddTransitions(Vector2Int[] directions, WorldInstance world)
     {
         TilePlacementInstance tile;
 
@@ -103,24 +102,25 @@ public class WorldTile
         {
             GenTile genTile = tileInstance.GetTile();
             GenTile adjacentTile;
-            for (int i = 0; i < positions.Length; i++)
+            for (int i = 0; i < directions.Length; i++)
             {
-                if (world.GetTile((Vector2Int)positions[i], out tile))
+                if (world.GetTile((Vector2Int)(directions[i] + position), out tile))
                 {
                     adjacentTile = tile.GetTile();
                     if (genTile.GetPriority(world.GetPlanet()) > adjacentTile.GetPriority(world.GetPlanet()))
                     {
-                        tileInstance.AddTransition(positions[i]);
+                        tileInstance.AddTransition(directions[i]);
+                        tile.AddExtension(-directions[i]);
                     }
                     else if (genTile.GetPriority(world.GetPlanet()) < adjacentTile.GetPriority(world.GetPlanet()))
                     {
-                        tile.AddTransition(new Vector3Int(position.x, position.y, 0));
+                        tile.AddTransition(-directions[i]);
+                        tileInstance.AddExtension(directions[i]);
                     }
                 }
             }
             return true;
         }
-
         return false;
     }
 

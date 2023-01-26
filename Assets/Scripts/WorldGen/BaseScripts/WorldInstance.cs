@@ -27,7 +27,7 @@ public class WorldInstance : MonoBehaviour
         }
         Vector2Int startLocation = new Vector2Int(spawnLocation.x - genData.viewDistance.x, spawnLocation.y - genData.viewDistance.y);
         Vector2Int endLocation = new Vector2Int(spawnLocation.x + genData.viewDistance.x, spawnLocation.y + genData.viewDistance.y);
-        Placement(startLocation, endLocation, new Vector3Int[] { Vector3Int.down, Vector3Int.right });
+        Placement(startLocation, endLocation, new Vector2Int[] { Vector2Int.down, Vector2Int.right });
     }
 
     public void PlaceTile(Map map, TileBase tile, Vector3Int position)
@@ -47,7 +47,7 @@ public class WorldInstance : MonoBehaviour
         return tilemaps[map];
     }
 
-    void Placement(Vector2Int startLocation, Vector2Int endLocation, Vector3Int[] transitionDirections)
+    void Placement(Vector2Int startLocation, Vector2Int endLocation, Vector2Int[] transitionDirections)
     {
         Vector2Int position;
         WorldTile tile;
@@ -85,7 +85,8 @@ public class WorldInstance : MonoBehaviour
         Detail,
         Base,
         Collision,
-        Transition
+        Transition,
+        Extension
     }
 }
 

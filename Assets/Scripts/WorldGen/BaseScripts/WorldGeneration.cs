@@ -19,7 +19,6 @@ public class WorldGeneration : MonoBehaviour
     public void Start()
     {
         GenerateWorld(917595710, worlds[UnityEngine.Random.Range(0, worlds.Length)], worldGenData.player);
-
     }
 
     public void GenerateWorld(int seed, WorldTemplate world, Entity player)
@@ -60,9 +59,9 @@ public class WorldGeneration : MonoBehaviour
         Vector2Int spawnLocation = spawnLocations[UnityEngine.Random.Range(0, spawnLocations.Count)];
         WorldTile tile;
         Vector2Int position;
-        for (int y = spawnLocation.y - worldGenData.viewDistance.y; y <= spawnLocation.y + worldGenData.viewDistance.y; y++)
+        for (int y = spawnLocation.y - worldGenData.viewDistance.y - 1; y <= spawnLocation.y + worldGenData.viewDistance.y + 1; y++)
         {
-            for (int x = spawnLocation.x - worldGenData.viewDistance.x; x <= spawnLocation.x + worldGenData.viewDistance.x; x++)
+            for (int x = spawnLocation.x - worldGenData.viewDistance.x - 1; x <= spawnLocation.x + worldGenData.viewDistance.x + 1; x++)
             {
                 position = new Vector2Int(x, y);
                 if (!tiles.TryGetValue(position, out tile))
@@ -79,12 +78,6 @@ public class WorldGeneration : MonoBehaviour
     {
         worldInstance.End();
     }
-
-    public Planet CurrentPlanet()
-    {
-        return worldGenData.worldTemplate.GetPlanet();
-    }
-
 }
 
 [System.Serializable]

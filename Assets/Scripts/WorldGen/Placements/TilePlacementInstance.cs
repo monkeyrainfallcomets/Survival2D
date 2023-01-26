@@ -27,42 +27,56 @@ public class TilePlacementInstance : PlacementInstance
         base.Place(world);
     }
 
-    public void AddTransition(Vector3Int direction)
+    public void AddTransition(Vector2Int direction)
     {
         transitions[GetIndex(direction)] = true;
     }
-    public void AddExtension(Vector3Int direction)
+    public void AddExtension(Vector2Int direction)
     {
         transitions[GetIndex(direction)] = true;
     }
 
     void MakeTransitions(WorldInstance world)
     {
-        Tilemap tilemap = world.GetMap(WorldInstance.Map.Transition);
+        Tilemap transitionTilemap = world.GetMap(WorldInstance.Map.Transition);
+        Tilemap extensionTilemap = world.GetMap(WorldInstance.Map.Extension);
         int tileIndex = GenTile.GetTransitionTileIndex(transitions);
+        int extensionIndex = GenTile.GetTransitionTileIndex(extensions);
         if (tileIndex != -1)
         {
             tilemap.SetTile(position, genTile.transitionTiles[tileIndex]);
+        }
+        else
+        {
+            Debug.Log("uh oh");
+        }
+        if (extensionIndex != -1)
+        {
+            tilemap.SetTile(position, genTile.extensionTiles[extensionIndex]);
+        }
+        else
+        {
+            Debug.Log("uh oh");
         }
     }
 
 
 
-    private int GetIndex(Vector3Int direction)
+    private int GetIndex(Vector2Int direction)
     {
-        if (direction == Vector3Int.left)
+        if (direction == Vector2Int.left)
         {
             return 0;
         }
-        else if (direction == Vector3Int.down)
+        else if (direction == Vector2Int.down)
         {
             return 1;
         }
-        else if (direction == Vector3Int.right)
+        else if (direction == Vector2Int.right)
         {
             return 2;
         }
-        else if (direction == Vector3Int.up)
+        else if (direction == Vector2Int.up)
         {
             return 3;
         }
