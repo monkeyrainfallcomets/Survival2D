@@ -15,7 +15,7 @@ public class Entity : MonoBehaviour
     float stamina = 0;
     float currentHp = 0;
 
-    void Start()
+    void Awake()
     {
         UpdateEntity();
         stamina = stats.maxStamina;

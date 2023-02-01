@@ -18,7 +18,7 @@ public class WorldGeneration : MonoBehaviour
 
     public void Start()
     {
-        GenerateWorld(917595710, worlds[UnityEngine.Random.Range(0, worlds.Length)], worldGenData.player);
+        GenerateWorld(UnityEngine.Random.Range(0, 9999999), worlds[UnityEngine.Random.Range(0, worlds.Length)], worldGenData.player);
     }
 
     public void GenerateWorld(int seed, WorldTemplate world, Entity player)

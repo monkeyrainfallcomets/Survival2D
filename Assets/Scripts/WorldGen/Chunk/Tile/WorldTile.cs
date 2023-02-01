@@ -19,12 +19,11 @@ public class WorldTile
         this.position = position;
         this.noiseValues = noiseValues;
         this.tile = tile;
-        tile.CreateInstance(world, position, noiseValues);
-
+        tileInstance = tile.CreateInstance(world, position, noiseValues);
         tile.SelectDetail(position, out detail, noiseValues);
         if (detail)
         {
-            detail.CreateInstance(world, position);
+            detailInstance = detail.CreateInstance(world, position);
         }
         this.structure = null;
     }
@@ -41,6 +40,7 @@ public class WorldTile
         }
         return true;
     }
+
     public void Place(WorldInstance world, Vector2Int[] transitionDirections)
     {
         if (!placed)

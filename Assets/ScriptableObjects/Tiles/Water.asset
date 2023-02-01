@@ -12,26 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e89f761310bb64aa9b896ad82a62688a, type: 3}
   m_Name: Water
   m_EditorClassIdentifier: 
-  details:
-  - chance: 0.02500000037252903
-    placements:
-    - heatValue:
-        min: 0
-        max: 1
-      moistureValue:
-        min: 0
-        max: 1
-      values:
-      - heatValue:
-          min: 0
-          max: 1
-        moistureValue:
-          min: 0
-          max: 1
-        heightValue:
-          min: 0
-          max: 1
-        value: {fileID: 11400000, guid: 96e78e29044e343a18b7775bccba401a, type: 2}
+  baseTile: {fileID: 11400000, guid: a9a2ac84dac49447983eee55812295a4, type: 2}
   tiles:
   - chance: 1
     placements:
@@ -52,5 +33,26 @@ MonoBehaviour:
           min: 0
           max: 1
         value: {fileID: 11400000, guid: a9a2ac84dac49447983eee55812295a4, type: 2}
+  details:
+  - chance: 0.02500000037252903
+    placements:
+    - heatValue:
+        min: 0
+        max: 1
+      moistureValue:
+        min: 0
+        max: 1
+      values:
+      - heatValue:
+          min: 0
+          max: 1
+        moistureValue:
+          min: 0
+          max: 1
+        heightValue:
+          min: 0
+          max: 1
+        value: {fileID: 11400000, guid: 96e78e29044e343a18b7775bccba401a, type: 2}
   damageType: 2
+  zIndex: 0
   traversability: 2

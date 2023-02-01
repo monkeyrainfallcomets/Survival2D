@@ -20,13 +20,13 @@ public class TilePlacement : ScriptableObject
     {
         Tilemap tilemap = world.GetMap(WorldInstance.Map.Base);
         GenTile tile = GetTile(position, noiseValues);
-        return new TilePlacementInstance(tilemap, new Vector3Int(position.x, position.y, zIndex), tile);
+        return new TilePlacementInstance(tilemap, new Vector3Int(position.x, position.y, zIndex), tile, tile.GetPriority(world.GetPlanet()));
     }
 
     public TilePlacementInstance CreateInstance(GenTile tile, WorldInstance world, Vector2Int position)
     {
         Tilemap tilemap = world.GetMap(WorldInstance.Map.Base);
-        return new TilePlacementInstance(tilemap, (Vector3Int)position, tile);
+        return new TilePlacementInstance(tilemap, (Vector3Int)position, tile, tile.GetPriority(world.GetPlanet()));
     }
 
     public GenTile GetTile(Vector2Int position, NoiseValue noiseValues)
@@ -69,18 +69,21 @@ public class TilePlacement : ScriptableObject
 
     public bool PostGenerationAdjustments(WorldInstance world, Vector3Int position, out TilePlacementInstance tileInstance)
     {
-        TilePlacementInstance[] tiles = new TilePlacementInstance[4];
-        world.GetTile(new Vector2Int(position.x - 1, position.y), out tiles[0]);
-        world.GetTile(new Vector2Int(position.x, position.y - 1), out tiles[1]);
-        world.GetTile(new Vector2Int(position.x + 1, position.y), out tiles[2]);
-        world.GetTile(new Vector2Int(position.x, position.y + 1), out tiles[3]);
-        GenTile genTile;
-        for (int i = 0; i < tileAdjustments.Length; i++)
+        if (tileAdjustments != null)
         {
-            if (tileAdjustments[i].GetTile(out genTile, tiles))
+            TilePlacementInstance[] tiles = new TilePlacementInstance[4];
+            world.GetTile(new Vector2Int(position.x - 1, position.y), out tiles[0]);
+            world.GetTile(new Vector2Int(position.x, position.y - 1), out tiles[1]);
+            world.GetTile(new Vector2Int(position.x + 1, position.y), out tiles[2]);
+            world.GetTile(new Vector2Int(position.x, position.y + 1), out tiles[3]);
+            GenTile genTile;
+            for (int i = 0; i < tileAdjustments.Length; i++)
             {
-                tileInstance = new TilePlacementInstance(world.GetMap(WorldInstance.Map.Base), new Vector3Int(position.x, position.y, zIndex), genTile);
-                return true;
+                if (tileAdjustments[i].GetTile(out genTile, tiles))
+                {
+                    tileInstance = new TilePlacementInstance(world.GetMap(WorldInstance.Map.Base), new Vector3Int(position.x, position.y, zIndex), genTile, genTile.GetPriority(world.GetPlanet()));
+                    return true;
+                }
             }
         }
         tileInstance = null;

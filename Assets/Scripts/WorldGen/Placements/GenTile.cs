@@ -11,6 +11,7 @@ public class GenTile : ScriptableObject
     public TileBase[] extensionTiles;
     public int GetPriority(Planet planet)
     {
+
         return priority[planet];
     }
     public static int GetTransitionTileIndex(bool[] transitions)

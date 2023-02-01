@@ -173,7 +173,7 @@ MonoBehaviour:
   requiredSpawnPoints: 50
   worldGenData:
     player: {fileID: 1132284695}
-    viewDistance: {x: 6, y: 6}
+    viewDistance: {x: 50, y: 50}
     seed: 0
     worldTemplate: {fileID: 0}
   grid: {fileID: 8723279562353128043}
@@ -516,6 +516,10 @@ MonoBehaviour:
           effectiveness: 4
           multiplier: 1
       - Key: 2
+        Value:
+          effectiveness: 2
+          multiplier: 1
+      - Key: 0
         Value:
           effectiveness: 2
           multiplier: 1

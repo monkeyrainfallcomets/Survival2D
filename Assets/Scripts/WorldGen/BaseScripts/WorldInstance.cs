@@ -27,7 +27,7 @@ public class WorldInstance : MonoBehaviour
         }
         Vector2Int startLocation = new Vector2Int(spawnLocation.x - genData.viewDistance.x, spawnLocation.y - genData.viewDistance.y);
         Vector2Int endLocation = new Vector2Int(spawnLocation.x + genData.viewDistance.x, spawnLocation.y + genData.viewDistance.y);
-        Placement(startLocation, endLocation, new Vector2Int[] { Vector2Int.down, Vector2Int.right });
+        Placement(startLocation, endLocation, new Vector2Int[] { Vector2Int.up, Vector2Int.right });
     }
 
     public void PlaceTile(Map map, TileBase tile, Vector3Int position)
@@ -55,7 +55,7 @@ public class WorldInstance : MonoBehaviour
         {
             for (int x = startLocation.x; x <= endLocation.x; x++)
             {
-                position = new Vector2Int(0, 0);
+                position = new Vector2Int(x, y);
                 if (worldTiles.TryGetValue(position, out tile))
                 {
                     tile.Place(this, transitionDirections);

@@ -9,13 +9,16 @@ public class TilePlacementInstance : PlacementInstance
     Vector3Int position;
     Tilemap tilemap;
     GenTile genTile;
+    int priority;
     bool[] transitions = new bool[4];
     bool[] extensions = new bool[4];
-    public TilePlacementInstance(Tilemap tilemap, Vector3Int position, GenTile genTile)
+
+    public TilePlacementInstance(Tilemap tilemap, Vector3Int position, GenTile genTile, int priority)
     {
         this.position = position;
         this.tilemap = tilemap;
         this.genTile = genTile;
+        this.priority = priority;
     }
 
     public override void Destroy(WorldInstance world)
@@ -24,40 +27,34 @@ public class TilePlacementInstance : PlacementInstance
     }
     public override void Place(WorldInstance world)
     {
-        base.Place(world);
-    }
-
-    public void AddTransition(Vector2Int direction)
-    {
-        transitions[GetIndex(direction)] = true;
-    }
-    public void AddExtension(Vector2Int direction)
-    {
-        transitions[GetIndex(direction)] = true;
-    }
-
-    void MakeTransitions(WorldInstance world)
-    {
-        Tilemap transitionTilemap = world.GetMap(WorldInstance.Map.Transition);
-        Tilemap extensionTilemap = world.GetMap(WorldInstance.Map.Extension);
+        Debug.Log(position + " was placed");
         int tileIndex = GenTile.GetTransitionTileIndex(transitions);
         int extensionIndex = GenTile.GetTransitionTileIndex(extensions);
-        if (tileIndex != -1)
+        if (tileIndex != -1 && genTile.transitionTiles != null)
         {
+            Tilemap transitionTilemap = world.GetMap(WorldInstance.Map.Transition);
             tilemap.SetTile(position, genTile.transitionTiles[tileIndex]);
         }
         else
         {
-            Debug.Log("uh oh");
+            tilemap.SetTile(position, genTile.baseTile);
         }
-        if (extensionIndex != -1)
+        if (extensionIndex != -1 && genTile.extensionTiles != null)
         {
-            tilemap.SetTile(position, genTile.extensionTiles[extensionIndex]);
+            Tilemap extensionTilemap = world.GetMap(WorldInstance.Map.Extension);
+            extensionTilemap.SetTile(new Vector3Int(position.x, position.y, priority), genTile.extensionTiles[extensionIndex]);
         }
-        else
-        {
-            Debug.Log("uh oh");
-        }
+    }
+
+    public void AddTransition(Vector2Int direction)
+    {
+        Debug.Log("transition added at " + position + "it was applied to tile in the direction " + direction);
+        transitions[GetIndex(direction)] = true;
+    }
+    public void AddExtension(Vector2Int direction)
+    {
+        Debug.Log("extension added at " + position + "it was applied to tile in the direction " + direction);
+        extensions[GetIndex(direction)] = true;
     }
 
 

@@ -17,4 +17,20 @@ MonoBehaviour:
     - Key: 0
       Value: 0
   baseTile: {fileID: 11400000, guid: 2ca54831e406b4905b20765b32da8eb5, type: 2}
-  transitionPiece: {fileID: 0}
+  transitionTiles: []
+  extensionTiles:
+  - {fileID: 11400000, guid: b9ae587a5a1b044b188f6564750e1b89, type: 2}
+  - {fileID: 11400000, guid: 226033db09f3d4e368178a5cba28c74b, type: 2}
+  - {fileID: 11400000, guid: 10f27cf3700324083b38b1a0f38e1652, type: 2}
+  - {fileID: 11400000, guid: 45c012f3c9b4042c8a2b334e7545dcd4, type: 2}
+  - {fileID: 11400000, guid: d45394c88f3ac42459ce65346cfc4593, type: 2}
+  - {fileID: 11400000, guid: a89231f25396447e78c852d279e50b20, type: 2}
+  - {fileID: 11400000, guid: e1fb897bd1f6b4bfab9e3e087b682dfb, type: 2}
+  - {fileID: 11400000, guid: 6b3caff2c36264ee4a2344058a4583d9, type: 2}
+  - {fileID: 11400000, guid: 6e9c55ac7ac5242f2bf78558a7fa74d1, type: 2}
+  - {fileID: 11400000, guid: 5faba7f36df0448a987620646381016b, type: 2}
+  - {fileID: 11400000, guid: fdea3c3c7b435434bbceca8167b5705f, type: 2}
+  - {fileID: 11400000, guid: b239f069b8cb6459691f5d662075d3c6, type: 2}
+  - {fileID: 11400000, guid: 901ac941be2a34cdda8f0dc45a1f92a3, type: 2}
+  - {fileID: 11400000, guid: 90565bc608afc4a13aa372e0e560b699, type: 2}
+  - {fileID: 11400000, guid: 8e71891eae1ac4b1e8ebeebf5fc7c4c7, type: 2}
