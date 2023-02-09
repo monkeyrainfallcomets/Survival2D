@@ -7,12 +7,34 @@ public class GenTile : ScriptableObject
 {
     [SerializeField] SerializableDictionary<Planet, int> priority;
     public TileBase baseTile;
-    public TileBase[] transitionTiles;
-    public TileBase[] extensionTiles;
+    public Texture2D baseTexture;
+    public Texture2D[] transitionTiles;
+    public Texture2D[] cornerTransitions;
+    [SerializeField] RandomNoiseGroup<Placement>[] details;
     public int GetPriority(Planet planet)
     {
-
         return priority[planet];
+    }
+
+    public bool SelectDetail(Vector2Int position, out Placement placement, NoiseValue noiseValues)
+    {
+        if (details != null)
+        {
+            int valueAverage = (int)(((noiseValues.heightValue + noiseValues.heatValue + noiseValues.moistureValue) * 100) / 3);
+            int randomSeed = valueAverage * (position.x * position.y);
+            System.Random random = new System.Random(randomSeed);
+            double randomNum = random.NextDouble();
+
+            for (int i = 0; i < details.Length; i++)
+            {
+                if (details[i].TrySelectPlacement(randomNum, out placement, noiseValues))
+                {
+                    return true;
+                }
+            }
+        }
+        placement = null;
+        return false;
     }
     public static int GetTransitionTileIndex(bool[] transitions)
     {

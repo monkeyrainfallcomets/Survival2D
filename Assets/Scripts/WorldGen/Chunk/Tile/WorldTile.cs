@@ -20,7 +20,7 @@ public class WorldTile
         this.noiseValues = noiseValues;
         this.tile = tile;
         tileInstance = tile.CreateInstance(world, position, noiseValues);
-        tile.SelectDetail(position, out detail, noiseValues);
+        tileInstance.SelectDetail(position, out detail, noiseValues);
         if (detail)
         {
             detailInstance = detail.CreateInstance(world, position);
@@ -109,13 +109,15 @@ public class WorldTile
                     adjacentTile = tile.GetTile();
                     if (genTile.GetPriority(world.GetPlanet()) > adjacentTile.GetPriority(world.GetPlanet()))
                     {
-                        tileInstance.AddTransition(directions[i]);
-                        tile.AddExtension(-directions[i]);
+                        tileInstance.AddTransition(directions[i], tile);
                     }
                     else if (genTile.GetPriority(world.GetPlanet()) < adjacentTile.GetPriority(world.GetPlanet()))
                     {
-                        tile.AddTransition(-directions[i]);
-                        tileInstance.AddExtension(directions[i]);
+                        tile.AddTransition(-directions[i], tileInstance);
+                    }
+                    else
+                    {
+                        tile.CacheNeighbor(tile, directions[i]);
                     }
                 }
             }

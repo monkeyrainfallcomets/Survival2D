@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cb0dcd6874584c6b96905492d78a37a, type: 3}
   m_Name: Erf
   m_EditorClassIdentifier: 
+  planet: 0
   moistureMap: {fileID: 11400000, guid: c4befc2fbee04433893bf7e297f47447, type: 2}
   heatMap: {fileID: 11400000, guid: b729b521339ac4402ab2f2343011d7e9, type: 2}
   heightMap: {fileID: 11400000, guid: a6a3646901ac145318a9ea3f0bcf2e07, type: 2}
@@ -40,6 +41,16 @@ MonoBehaviour:
       min: 0.75
       max: 1
     values:
+    - heatValue:
+        min: 0
+        max: 1
+      moistureValue:
+        min: 0
+        max: 1
+      heightValue:
+        min: 0
+        max: 0.25
+      value: {fileID: 11400000, guid: de8a6fe0382fb49f48eb3a4893035f03, type: 2}
     - heatValue:
         min: 0
         max: 1

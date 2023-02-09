@@ -11,14 +11,20 @@ public class WorldGeneration : MonoBehaviour
     [SerializeField] int requiredSpawnPoints;
     [SerializeField] WorldGenData worldGenData;
     [SerializeField] Transform grid;
-    [SerializeField] TileBase tile;
+    [SerializeField] Texture2D texture;
     Vector3 playerPosition;
     WorldTemplate world;
     WorldInstance worldInstance;
 
     public void Start()
     {
-        GenerateWorld(UnityEngine.Random.Range(0, 9999999), worlds[UnityEngine.Random.Range(0, worlds.Length)], worldGenData.player);
+        //GenerateWorld(UnityEngine.Random.Range(0, 9999999), worlds[UnityEngine.Random.Range(0, worlds.Length)], worldGenData.player);
+        Texture2D corner = new Texture2D(4, 4);
+
+        TilePlacementInstance.RectPaste(new RectInt(0, 0, 3, 3), new RectInt(12, 0, 15, 3), corner, corner, texture, false);
+
+
+        texture.Apply(true, false);
     }
 
     public void GenerateWorld(int seed, WorldTemplate world, Entity player)

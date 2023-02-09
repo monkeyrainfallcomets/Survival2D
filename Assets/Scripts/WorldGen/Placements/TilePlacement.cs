@@ -8,7 +8,6 @@ public class TilePlacement : ScriptableObject
 {
     [SerializeField] GenTile baseTile;
     [SerializeField] RandomNoiseGroup<GenTile>[] tiles;
-    [SerializeField] RandomNoiseGroup<Placement>[] details;
     [SerializeField] TileAdjustmentGroup[] tileAdjustments;
     [SerializeField] DamageTypes damageType;
     [SerializeField] int zIndex;
@@ -44,27 +43,6 @@ public class TilePlacement : ScriptableObject
             }
         }
         return baseTile;
-    }
-
-    public bool SelectDetail(Vector2Int position, out Placement placement, NoiseValue noiseValues)
-    {
-        if (details != null)
-        {
-            int valueAverage = (int)(((noiseValues.heightValue + noiseValues.heatValue + noiseValues.moistureValue) * 100) / 3);
-            int randomSeed = valueAverage * (position.x * position.y);
-            System.Random random = new System.Random(randomSeed);
-            double randomNum = random.NextDouble();
-
-            for (int i = 0; i < details.Length; i++)
-            {
-                if (details[i].TrySelectPlacement(randomNum, out placement, noiseValues))
-                {
-                    return true;
-                }
-            }
-        }
-        placement = null;
-        return false;
     }
 
     public bool PostGenerationAdjustments(WorldInstance world, Vector3Int position, out TilePlacementInstance tileInstance)

@@ -170,14 +170,14 @@ MonoBehaviour:
   chunkPrefab: {fileID: 2890851165211756808, guid: 25aeb8dc728ad47fd946ded8bdd577c0, type: 3}
   worlds:
   - {fileID: 11400000, guid: 3c6d1c7b4c1d14aa29836c06a8b66046, type: 2}
-  requiredSpawnPoints: 50
+  requiredSpawnPoints: 100
   worldGenData:
     player: {fileID: 1132284695}
     viewDistance: {x: 50, y: 50}
     seed: 0
     worldTemplate: {fileID: 0}
   grid: {fileID: 8723279562353128043}
-  tile: {fileID: 11400000, guid: ca96c2bc8e02b4a05a38784386e7766d, type: 2}
+  texture: {fileID: 2800000, guid: c4dbbf66b22364a22a6ee169e1c07e0e, type: 3}
 --- !u!1 &472771134
 GameObject:
   m_ObjectHideFlags: 0
