@@ -13,11 +13,11 @@ public class DetailTilePlacementInstance : PlacementInstance
         this.tilemap = tilemap;
     }
 
-    public override void Destroy(WorldInstance world)
+    public override void Destroy(PlanetGenerationInstance world)
     {
         tilemap.SetTile(position, null);
     }
-    public override void Place(WorldInstance world)
+    public override void Place(PlanetGenerationInstance world)
     {
         tilemap.SetTile(position, tileBase);
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-[CreateAssetMenu(fileName = "NewTile", menuName = "WorldGen/Tile")]
+[CreateAssetMenu(fileName = "NewTile", menuName = "WorldGen/WorldTiles/Tile")]
 public class TilePlacement : ScriptableObject
 {
     [SerializeField] GenTile baseTile;
@@ -15,17 +15,17 @@ public class TilePlacement : ScriptableObject
     [Header("Entity's effectiveness must be less than this for it to be traversable by that entity")]
     [SerializeField] protected Effectiveness traversability;
 
-    public TilePlacementInstance CreateInstance(WorldInstance world, Vector2Int position, NoiseValue noiseValues)
+    public TilePlacementInstance CreateInstance(PlanetGenerationInstance world, Vector2Int position, NoiseValue noiseValues)
     {
-        Tilemap tilemap = world.GetMap(WorldInstance.Map.Base);
+        Tilemap tilemap = world.GetMap(PlanetGenerationInstance.Map.Base);
         GenTile tile = GetTile(position, noiseValues);
-        return new TilePlacementInstance(tilemap, new Vector3Int(position.x, position.y, zIndex), tile, tile.GetPriority(world.GetPlanet()));
+        return new TilePlacementInstance(tilemap, new Vector3Int(position.x, position.y, zIndex), tile, tile.tile.GetPriority(world.GetPlanet()));
     }
 
-    public TilePlacementInstance CreateInstance(GenTile tile, WorldInstance world, Vector2Int position)
+    public TilePlacementInstance CreateInstance(GenTile tile, PlanetGenerationInstance world, Vector2Int position)
     {
-        Tilemap tilemap = world.GetMap(WorldInstance.Map.Base);
-        return new TilePlacementInstance(tilemap, (Vector3Int)position, tile, tile.GetPriority(world.GetPlanet()));
+        Tilemap tilemap = world.GetMap(PlanetGenerationInstance.Map.Base);
+        return new TilePlacementInstance(tilemap, (Vector3Int)position, tile, tile.tile.GetPriority(world.GetPlanet()));
     }
 
     public GenTile GetTile(Vector2Int position, NoiseValue noiseValues)
@@ -45,7 +45,7 @@ public class TilePlacement : ScriptableObject
         return baseTile;
     }
 
-    public bool PostGenerationAdjustments(WorldInstance world, Vector3Int position, out TilePlacementInstance tileInstance)
+    public bool PostGenerationAdjustments(PlanetGenerationInstance world, Vector3Int position, out TilePlacementInstance tileInstance)
     {
         if (tileAdjustments != null)
         {
@@ -59,7 +59,7 @@ public class TilePlacement : ScriptableObject
             {
                 if (tileAdjustments[i].GetTile(out genTile, tiles))
                 {
-                    tileInstance = new TilePlacementInstance(world.GetMap(WorldInstance.Map.Base), new Vector3Int(position.x, position.y, zIndex), genTile, genTile.GetPriority(world.GetPlanet()));
+                    tileInstance = new TilePlacementInstance(world.GetMap(PlanetGenerationInstance.Map.Base), new Vector3Int(position.x, position.y, zIndex), genTile, genTile.tile.GetPriority(world.GetPlanet()));
                     return true;
                 }
             }

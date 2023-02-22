@@ -21,11 +21,11 @@ public class TilePlacementInstance : PlacementInstance
         this.priority = priority;
     }
 
-    public override void Destroy(WorldInstance world)
+    public override void Destroy(PlanetGenerationInstance world)
     {
         tilemap.SetTile(position, null);
     }
-    public override void Place(WorldInstance world)
+    public override void Place(PlanetGenerationInstance world)
     {
         for (int i = 0; i < 4; i++)
         {
@@ -35,25 +35,17 @@ public class TilePlacementInstance : PlacementInstance
             }
         }
         int tileIndex = GenTile.GetTransitionTileIndex(transitions);
-        if (tileIndex != -1 && genTile.transitionTiles != null)
+        if (tileIndex != -1 && genTile.tile.transitionTiles != null)
         {
-            Texture2D baseTexture = genTile.transitionTiles[tileIndex];
+            Texture2D baseTexture = genTile.tile.transitionTiles[tileIndex];
             Tile tile = ScriptableObject.CreateInstance<Tile>();
             tile.sprite = Sprite.Create(GenerateTexture(baseTexture, world), new Rect(0, 0, 16, 16), new Vector2(0.5f, 0.5f), 16);
             tilemap.SetTile(position, tile);
-            //if (genTile.cornerTransitions != null && genTile.cornerTransitions.Length != 0)
-            //{
 
-            //}
         }
         else
         {
-            //tilemap.SetTile(position, genTile.baseTile);
-            Tile tile = ScriptableObject.CreateInstance<Tile>();
-            Texture2D texture;
-            AdjustCorners(genTile.baseTexture, out texture);
-            tile.sprite = Sprite.Create(GenerateTexture(texture, world), new Rect(0, 0, 16, 16), new Vector2(0.5f, 0.5f), 16);
-            tilemap.SetTile(position, tile);
+            tilemap.SetTile(position, genTile.tile.baseTile);
         }
 
     }
@@ -72,77 +64,6 @@ public class TilePlacementInstance : PlacementInstance
     {
         surroundingTiles[GetIndex(direction)] = tile;
     }
-    public bool AdjustCorners(Texture2D baseTexture, out Texture2D returnTexture)
-    {
-        Texture2D texture = null;
-        RectInt pasteRect = new RectInt();
-        RectInt referenceRect = new RectInt();
-        Texture2D corner = new Texture2D(0, 0);
-        bool modify = false;
-        for (int i = 0; i < 3; i++)
-        {
-            switch (i)
-            {
-                case 0:
-                    if (surroundingTiles[3].HasTransition(0) && surroundingTiles[0].HasTransition(3))
-                    {
-                        corner = genTile.transitionTiles[0];
-                        modify = true;
-                        referenceRect = new RectInt(0, 0, (corner.width - 1), (corner.height - 1));
-                        pasteRect = new RectInt(0, 15 - (corner.height - 1), (corner.width - 1), 15);
-                    }
-                    break;
-                case 1:
-                    if (surroundingTiles[0].HasTransition(1) && surroundingTiles[1].HasTransition(0))
-                    {
-                        corner = genTile.transitionTiles[1];
-                        modify = true;
-                        referenceRect = new RectInt(0, 0, (corner.width - 1), (corner.height - 1));
-                        pasteRect = new RectInt(0, 0, (corner.width - 1), (corner.height - 1));
-                    }
-                    break;
-                case 2:
-                    if (surroundingTiles[2].HasTransition(1) && surroundingTiles[1].HasTransition(2))
-                    {
-                        corner = genTile.transitionTiles[2];
-                        modify = true;
-                        referenceRect = new RectInt(0, 0, (corner.width - 1), (corner.height - 1));
-                        pasteRect = new RectInt(15 - (corner.width - 1), 0, 15, (corner.height - 1));
-                    }
-                    break;
-                case 3:
-                    if (surroundingTiles[3].HasTransition(2) && surroundingTiles[2].HasTransition(3))
-                    {
-                        corner = genTile.transitionTiles[3];
-                        modify = true;
-                        referenceRect = new RectInt(0, 0, (corner.width - 1), (corner.height - 1));
-                        pasteRect = new RectInt(0, 0, (corner.height - 1), (corner.height - 1));
-                    }
-                    break;
-            }
-            if (!texture && modify)
-            {
-                texture = new Texture2D(16, 16, TextureFormat.RGBA32, baseTexture.mipmapCount, true);
-            }
-            if (modify)
-            {
-                RectPaste(referenceRect, pasteRect, corner, corner, texture, false);
-            }
-        }
-        if (texture != null)
-        {
-            texture.Apply(true, false);
-            returnTexture = texture;
-            return true;
-        }
-        else
-        {
-            returnTexture = null;
-            return false;
-        }
-
-    }
-
     public static void RectPaste(RectInt referenceRect, RectInt pasteRect, Texture2D baseTexture, Texture2D alphaTexture, Texture2D outputTexture, bool transparencyOnly)
     {
         Vector2Int pasteLocation = pasteRect.position;
@@ -174,63 +95,63 @@ public class TilePlacementInstance : PlacementInstance
                 referenceLocation.x++;
         }
     }
-    private Texture2D GenerateTexture(Texture2D baseTexture, WorldInstance world)
+    private Texture2D GenerateTexture(Texture2D baseTexture, PlanetGenerationInstance world)
     {
         Texture2D texture = new Texture2D(16, 16, TextureFormat.RGBA32, baseTexture.mipmapCount, true);
         texture.filterMode = FilterMode.Point;
         Graphics.CopyTexture(baseTexture, texture);
         bool assigned = false;
-        Planet planet = world.GetPlanet();
+        PlanetType planet = world.GetPlanet();
 
         if (transitions[0])
         {
             if (transitions[1] && !transitions[3])
             {
-                if ((surroundingTiles[0].GetTile().GetPriority(planet) > surroundingTiles[1].GetTile().GetPriority(planet)))
+                if ((surroundingTiles[0].GetTile().tile.GetPriority(planet) > surroundingTiles[1].GetTile().tile.GetPriority(planet)))
                 {
-                    RectPaste(new RectInt(12, 4, 15, 15), new RectInt(0, 4, 3, 15), surroundingTiles[0].GetTile().baseTexture, baseTexture, texture, true);
+                    RectPaste(new RectInt(12, 4, 15, 15), new RectInt(0, 4, 3, 15), surroundingTiles[0].GetTile().tile.baseTexture, baseTexture, texture, true);
                 }
                 else
                 {
-                    RectPaste(new RectInt(12, 0, 15, 15), new RectInt(0, 0, 3, 15), surroundingTiles[0].GetTile().baseTexture, baseTexture, texture, true);
+                    RectPaste(new RectInt(12, 0, 15, 15), new RectInt(0, 0, 3, 15), surroundingTiles[0].GetTile().tile.baseTexture, baseTexture, texture, true);
                 }
             }
             else if (!transitions[1] && transitions[3])
             {
-                if (surroundingTiles[0].GetTile().GetPriority(planet) > surroundingTiles[3].GetTile().GetPriority(planet))
+                if (surroundingTiles[0].GetTile().tile.GetPriority(planet) > surroundingTiles[3].GetTile().tile.GetPriority(planet))
                 {
-                    RectPaste(new RectInt(12, 0, 15, 11), new RectInt(0, 0, 3, 11), surroundingTiles[0].GetTile().baseTexture, baseTexture, texture, true);
+                    RectPaste(new RectInt(12, 0, 15, 11), new RectInt(0, 0, 3, 11), surroundingTiles[0].GetTile().tile.baseTexture, baseTexture, texture, true);
                 }
                 else
                 {
-                    RectPaste(new RectInt(12, 0, 15, 15), new RectInt(0, 0, 3, 15), surroundingTiles[0].GetTile().baseTexture, baseTexture, texture, true);
+                    RectPaste(new RectInt(12, 0, 15, 15), new RectInt(0, 0, 3, 15), surroundingTiles[0].GetTile().tile.baseTexture, baseTexture, texture, true);
                 }
             }
             else if (transitions[3] && transitions[1])
             {
-                if (surroundingTiles[0].GetTile().GetPriority(planet) > surroundingTiles[3].GetTile().GetPriority(planet))
+                if (surroundingTiles[0].GetTile().tile.GetPriority(planet) > surroundingTiles[3].GetTile().tile.GetPriority(planet))
                 {
-                    if (surroundingTiles[0].GetTile().GetPriority(planet) > surroundingTiles[1].GetTile().GetPriority(planet))
+                    if (surroundingTiles[0].GetTile().tile.GetPriority(planet) > surroundingTiles[1].GetTile().tile.GetPriority(planet))
                     {
-                        RectPaste(new RectInt(12, 4, 15, 11), new RectInt(0, 4, 3, 11), surroundingTiles[0].GetTile().baseTexture, baseTexture, texture, true);
+                        RectPaste(new RectInt(12, 4, 15, 11), new RectInt(0, 4, 3, 11), surroundingTiles[0].GetTile().tile.baseTexture, baseTexture, texture, true);
                     }
                     else
                     {
-                        RectPaste(new RectInt(12, 0, 15, 11), new RectInt(0, 0, 3, 11), surroundingTiles[0].GetTile().baseTexture, baseTexture, texture, true);
+                        RectPaste(new RectInt(12, 0, 15, 11), new RectInt(0, 0, 3, 11), surroundingTiles[0].GetTile().tile.baseTexture, baseTexture, texture, true);
                     }
                 }
-                else if (surroundingTiles[0].GetTile().GetPriority(planet) > surroundingTiles[1].GetTile().GetPriority(planet))
+                else if (surroundingTiles[0].GetTile().tile.GetPriority(planet) > surroundingTiles[1].GetTile().tile.GetPriority(planet))
                 {
-                    RectPaste(new RectInt(12, 4, 15, 15), new RectInt(0, 4, 3, 15), surroundingTiles[0].GetTile().baseTexture, baseTexture, texture, true);
+                    RectPaste(new RectInt(12, 4, 15, 15), new RectInt(0, 4, 3, 15), surroundingTiles[0].GetTile().tile.baseTexture, baseTexture, texture, true);
                 }
                 else
                 {
-                    RectPaste(new RectInt(12, 0, 15, 15), new RectInt(0, 0, 3, 15), surroundingTiles[0].GetTile().baseTexture, baseTexture, texture, true);
+                    RectPaste(new RectInt(12, 0, 15, 15), new RectInt(0, 0, 3, 15), surroundingTiles[0].GetTile().tile.baseTexture, baseTexture, texture, true);
                 }
             }
             else
             {
-                RectPaste(new RectInt(12, 0, 15, 15), new RectInt(0, 0, 3, 15), surroundingTiles[0].GetTile().baseTexture, baseTexture, texture, true);
+                RectPaste(new RectInt(12, 0, 15, 15), new RectInt(0, 0, 3, 15), surroundingTiles[0].GetTile().tile.baseTexture, baseTexture, texture, true);
             }
         }
 
@@ -238,51 +159,51 @@ public class TilePlacementInstance : PlacementInstance
         {
             if (transitions[0] && !transitions[2])
             {
-                if (surroundingTiles[1].GetTile().GetPriority(planet) > surroundingTiles[0].GetTile().GetPriority(planet))
+                if (surroundingTiles[1].GetTile().tile.GetPriority(planet) > surroundingTiles[0].GetTile().tile.GetPriority(planet))
                 {
-                    RectPaste(new RectInt(4, 12, 15, 15), new RectInt(4, 0, 15, 3), surroundingTiles[1].GetTile().baseTexture, baseTexture, texture, true);
+                    RectPaste(new RectInt(4, 12, 15, 15), new RectInt(4, 0, 15, 3), surroundingTiles[1].GetTile().tile.baseTexture, baseTexture, texture, true);
                 }
                 else
                 {
-                    RectPaste(new RectInt(0, 12, 15, 15), new RectInt(0, 0, 15, 3), surroundingTiles[1].GetTile().baseTexture, baseTexture, texture, true);
+                    RectPaste(new RectInt(0, 12, 15, 15), new RectInt(0, 0, 15, 3), surroundingTiles[1].GetTile().tile.baseTexture, baseTexture, texture, true);
                 }
             }
             else if (!transitions[0] && transitions[2])
             {
-                if (surroundingTiles[1].GetTile().GetPriority(planet) > surroundingTiles[2].GetTile().GetPriority(planet))
+                if (surroundingTiles[1].GetTile().tile.GetPriority(planet) > surroundingTiles[2].GetTile().tile.GetPriority(planet))
                 {
-                    RectPaste(new RectInt(0, 12, 11, 15), new RectInt(0, 0, 11, 3), surroundingTiles[1].GetTile().baseTexture, baseTexture, texture, true);
+                    RectPaste(new RectInt(0, 12, 11, 15), new RectInt(0, 0, 11, 3), surroundingTiles[1].GetTile().tile.baseTexture, baseTexture, texture, true);
                 }
                 else
                 {
-                    RectPaste(new RectInt(0, 12, 15, 15), new RectInt(0, 0, 15, 3), surroundingTiles[1].GetTile().baseTexture, baseTexture, texture, true);
+                    RectPaste(new RectInt(0, 12, 15, 15), new RectInt(0, 0, 15, 3), surroundingTiles[1].GetTile().tile.baseTexture, baseTexture, texture, true);
                 }
             }
             else if (transitions[0] && transitions[2])
             {
-                if (surroundingTiles[1].GetTile().GetPriority(planet) > surroundingTiles[2].GetTile().GetPriority(planet))
+                if (surroundingTiles[1].GetTile().tile.GetPriority(planet) > surroundingTiles[2].GetTile().tile.GetPriority(planet))
                 {
-                    if (surroundingTiles[1].GetTile().GetPriority(planet) > surroundingTiles[0].GetTile().GetPriority(planet))
+                    if (surroundingTiles[1].GetTile().tile.GetPriority(planet) > surroundingTiles[0].GetTile().tile.GetPriority(planet))
                     {
-                        RectPaste(new RectInt(4, 12, 11, 15), new RectInt(4, 0, 11, 3), surroundingTiles[1].GetTile().baseTexture, baseTexture, texture, true);
+                        RectPaste(new RectInt(4, 12, 11, 15), new RectInt(4, 0, 11, 3), surroundingTiles[1].GetTile().tile.baseTexture, baseTexture, texture, true);
                     }
                     else
                     {
-                        RectPaste(new RectInt(0, 12, 11, 15), new RectInt(0, 0, 11, 3), surroundingTiles[1].GetTile().baseTexture, baseTexture, texture, true);
+                        RectPaste(new RectInt(0, 12, 11, 15), new RectInt(0, 0, 11, 3), surroundingTiles[1].GetTile().tile.baseTexture, baseTexture, texture, true);
                     }
                 }
-                else if (surroundingTiles[1].GetTile().GetPriority(planet) > surroundingTiles[0].GetTile().GetPriority(planet))
+                else if (surroundingTiles[1].GetTile().tile.GetPriority(planet) > surroundingTiles[0].GetTile().tile.GetPriority(planet))
                 {
-                    RectPaste(new RectInt(4, 12, 15, 15), new RectInt(4, 0, 15, 3), surroundingTiles[1].GetTile().baseTexture, baseTexture, texture, true);
+                    RectPaste(new RectInt(4, 12, 15, 15), new RectInt(4, 0, 15, 3), surroundingTiles[1].GetTile().tile.baseTexture, baseTexture, texture, true);
                 }
                 else
                 {
-                    RectPaste(new RectInt(0, 12, 15, 15), new RectInt(0, 0, 15, 3), surroundingTiles[1].GetTile().baseTexture, baseTexture, texture, true);
+                    RectPaste(new RectInt(0, 12, 15, 15), new RectInt(0, 0, 15, 3), surroundingTiles[1].GetTile().tile.baseTexture, baseTexture, texture, true);
                 }
             }
             else
             {
-                RectPaste(new RectInt(0, 12, 15, 15), new RectInt(0, 0, 15, 3), surroundingTiles[1].GetTile().baseTexture, baseTexture, texture, true);
+                RectPaste(new RectInt(0, 12, 15, 15), new RectInt(0, 0, 15, 3), surroundingTiles[1].GetTile().tile.baseTexture, baseTexture, texture, true);
             }
         }
 
@@ -290,102 +211,102 @@ public class TilePlacementInstance : PlacementInstance
         {
             if (transitions[1] && !transitions[3])
             {
-                if (surroundingTiles[2].GetTile().GetPriority(planet) > surroundingTiles[1].GetTile().GetPriority(planet))
+                if (surroundingTiles[2].GetTile().tile.GetPriority(planet) > surroundingTiles[1].GetTile().tile.GetPriority(planet))
                 {
-                    RectPaste(new RectInt(0, 4, 3, 15), new RectInt(12, 4, 15, 15), surroundingTiles[2].GetTile().baseTexture, baseTexture, texture, true);
+                    RectPaste(new RectInt(0, 4, 3, 15), new RectInt(12, 4, 15, 15), surroundingTiles[2].GetTile().tile.baseTexture, baseTexture, texture, true);
                 }
                 else
                 {
-                    RectPaste(new RectInt(0, 0, 3, 15), new RectInt(12, 0, 15, 15), surroundingTiles[2].GetTile().baseTexture, baseTexture, texture, true);
+                    RectPaste(new RectInt(0, 0, 3, 15), new RectInt(12, 0, 15, 15), surroundingTiles[2].GetTile().tile.baseTexture, baseTexture, texture, true);
                 }
             }
             else if (!transitions[1] && transitions[3])
             {
-                if (surroundingTiles[2].GetTile().GetPriority(planet) > surroundingTiles[3].GetTile().GetPriority(planet))
+                if (surroundingTiles[2].GetTile().tile.GetPriority(planet) > surroundingTiles[3].GetTile().tile.GetPriority(planet))
                 {
-                    RectPaste(new RectInt(0, 0, 3, 11), new RectInt(12, 0, 15, 11), surroundingTiles[2].GetTile().baseTexture, baseTexture, texture, true);
+                    RectPaste(new RectInt(0, 0, 3, 11), new RectInt(12, 0, 15, 11), surroundingTiles[2].GetTile().tile.baseTexture, baseTexture, texture, true);
                 }
                 else
                 {
-                    RectPaste(new RectInt(0, 0, 3, 15), new RectInt(12, 0, 15, 15), surroundingTiles[2].GetTile().baseTexture, baseTexture, texture, true);
+                    RectPaste(new RectInt(0, 0, 3, 15), new RectInt(12, 0, 15, 15), surroundingTiles[2].GetTile().tile.baseTexture, baseTexture, texture, true);
                 }
             }
             else if (transitions[3] && transitions[1])
             {
-                if (surroundingTiles[2].GetTile().GetPriority(planet) > surroundingTiles[3].GetTile().GetPriority(planet))
+                if (surroundingTiles[2].GetTile().tile.GetPriority(planet) > surroundingTiles[3].GetTile().tile.GetPriority(planet))
                 {
-                    if (surroundingTiles[2].GetTile().GetPriority(planet) > surroundingTiles[1].GetTile().GetPriority(planet))
+                    if (surroundingTiles[2].GetTile().tile.GetPriority(planet) > surroundingTiles[1].GetTile().tile.GetPriority(planet))
                     {
-                        RectPaste(new RectInt(0, 4, 3, 11), new RectInt(12, 4, 15, 11), surroundingTiles[2].GetTile().baseTexture, baseTexture, texture, true);
+                        RectPaste(new RectInt(0, 4, 3, 11), new RectInt(12, 4, 15, 11), surroundingTiles[2].GetTile().tile.baseTexture, baseTexture, texture, true);
                     }
                     else
                     {
-                        RectPaste(new RectInt(0, 0, 3, 11), new RectInt(12, 0, 15, 11), surroundingTiles[2].GetTile().baseTexture, baseTexture, texture, true);
+                        RectPaste(new RectInt(0, 0, 3, 11), new RectInt(12, 0, 15, 11), surroundingTiles[2].GetTile().tile.baseTexture, baseTexture, texture, true);
                     }
                 }
-                else if (surroundingTiles[2].GetTile().GetPriority(planet) > surroundingTiles[1].GetTile().GetPriority(planet))
+                else if (surroundingTiles[2].GetTile().tile.GetPriority(planet) > surroundingTiles[1].GetTile().tile.GetPriority(planet))
                 {
-                    RectPaste(new RectInt(0, 4, 3, 15), new RectInt(12, 4, 15, 15), surroundingTiles[2].GetTile().baseTexture, baseTexture, texture, true);
+                    RectPaste(new RectInt(0, 4, 3, 15), new RectInt(12, 4, 15, 15), surroundingTiles[2].GetTile().tile.baseTexture, baseTexture, texture, true);
                 }
                 else
                 {
-                    RectPaste(new RectInt(0, 0, 3, 15), new RectInt(12, 0, 15, 15), surroundingTiles[2].GetTile().baseTexture, baseTexture, texture, true);
+                    RectPaste(new RectInt(0, 0, 3, 15), new RectInt(12, 0, 15, 15), surroundingTiles[2].GetTile().tile.baseTexture, baseTexture, texture, true);
                 }
             }
             else
             {
-                RectPaste(new RectInt(0, 0, 3, 15), new RectInt(12, 0, 15, 15), surroundingTiles[2].GetTile().baseTexture, baseTexture, texture, true);
+                RectPaste(new RectInt(0, 0, 3, 15), new RectInt(12, 0, 15, 15), surroundingTiles[2].GetTile().tile.baseTexture, baseTexture, texture, true);
             }
         }
         if (transitions[3])
         {
             if (transitions[0] && !transitions[2])
             {
-                if (surroundingTiles[3].GetTile().GetPriority(planet) > surroundingTiles[0].GetTile().GetPriority(planet))
+                if (surroundingTiles[3].GetTile().tile.GetPriority(planet) > surroundingTiles[0].GetTile().tile.GetPriority(planet))
                 {
-                    RectPaste(new RectInt(4, 0, 15, 3), new RectInt(4, 12, 15, 15), surroundingTiles[3].GetTile().baseTexture, baseTexture, texture, true);
+                    RectPaste(new RectInt(4, 0, 15, 3), new RectInt(4, 12, 15, 15), surroundingTiles[3].GetTile().tile.baseTexture, baseTexture, texture, true);
                 }
                 else
                 {
-                    RectPaste(new RectInt(0, 0, 15, 3), new RectInt(0, 12, 15, 15), surroundingTiles[3].GetTile().baseTexture, baseTexture, texture, true);
+                    RectPaste(new RectInt(0, 0, 15, 3), new RectInt(0, 12, 15, 15), surroundingTiles[3].GetTile().tile.baseTexture, baseTexture, texture, true);
                 }
             }
             else if (!transitions[0] && transitions[2])
             {
-                if (surroundingTiles[3].GetTile().GetPriority(planet) > surroundingTiles[2].GetTile().GetPriority(planet))
+                if (surroundingTiles[3].GetTile().tile.GetPriority(planet) > surroundingTiles[2].GetTile().tile.GetPriority(planet))
                 {
-                    RectPaste(new RectInt(0, 0, 11, 3), new RectInt(0, 12, 11, 15), surroundingTiles[3].GetTile().baseTexture, baseTexture, texture, true);
+                    RectPaste(new RectInt(0, 0, 11, 3), new RectInt(0, 12, 11, 15), surroundingTiles[3].GetTile().tile.baseTexture, baseTexture, texture, true);
                 }
                 else
                 {
-                    RectPaste(new RectInt(0, 0, 15, 3), new RectInt(0, 12, 15, 15), surroundingTiles[3].GetTile().baseTexture, baseTexture, texture, true);
+                    RectPaste(new RectInt(0, 0, 15, 3), new RectInt(0, 12, 15, 15), surroundingTiles[3].GetTile().tile.baseTexture, baseTexture, texture, true);
                 }
             }
             else if (transitions[0] && transitions[2])
             {
-                if (surroundingTiles[3].GetTile().GetPriority(planet) > surroundingTiles[2].GetTile().GetPriority(planet))
+                if (surroundingTiles[3].GetTile().tile.GetPriority(planet) > surroundingTiles[2].GetTile().tile.GetPriority(planet))
                 {
-                    if (surroundingTiles[3].GetTile().GetPriority(planet) > surroundingTiles[0].GetTile().GetPriority(planet))
+                    if (surroundingTiles[3].GetTile().tile.GetPriority(planet) > surroundingTiles[0].GetTile().tile.GetPriority(planet))
                     {
-                        RectPaste(new RectInt(4, 0, 11, 3), new RectInt(4, 12, 11, 15), surroundingTiles[3].GetTile().baseTexture, baseTexture, texture, true);
+                        RectPaste(new RectInt(4, 0, 11, 3), new RectInt(4, 12, 11, 15), surroundingTiles[3].GetTile().tile.baseTexture, baseTexture, texture, true);
                     }
                     else
                     {
-                        RectPaste(new RectInt(0, 0, 11, 3), new RectInt(0, 12, 11, 15), surroundingTiles[3].GetTile().baseTexture, baseTexture, texture, true);
+                        RectPaste(new RectInt(0, 0, 11, 3), new RectInt(0, 12, 11, 15), surroundingTiles[3].GetTile().tile.baseTexture, baseTexture, texture, true);
                     }
                 }
-                else if (surroundingTiles[3].GetTile().GetPriority(planet) > surroundingTiles[0].GetTile().GetPriority(planet))
+                else if (surroundingTiles[3].GetTile().tile.GetPriority(planet) > surroundingTiles[0].GetTile().tile.GetPriority(planet))
                 {
-                    RectPaste(new RectInt(4, 0, 15, 3), new RectInt(4, 12, 15, 15), surroundingTiles[3].GetTile().baseTexture, baseTexture, texture, true);
+                    RectPaste(new RectInt(4, 0, 15, 3), new RectInt(4, 12, 15, 15), surroundingTiles[3].GetTile().tile.baseTexture, baseTexture, texture, true);
                 }
                 else
                 {
-                    RectPaste(new RectInt(0, 0, 15, 3), new RectInt(0, 12, 15, 15), surroundingTiles[3].GetTile().baseTexture, baseTexture, texture, true);
+                    RectPaste(new RectInt(0, 0, 15, 3), new RectInt(0, 12, 15, 15), surroundingTiles[3].GetTile().tile.baseTexture, baseTexture, texture, true);
                 }
             }
             else
             {
-                RectPaste(new RectInt(0, 0, 15, 3), new RectInt(0, 12, 15, 15), surroundingTiles[3].GetTile().baseTexture, baseTexture, texture, true);
+                RectPaste(new RectInt(0, 0, 15, 3), new RectInt(0, 12, 15, 15), surroundingTiles[3].GetTile().tile.baseTexture, baseTexture, texture, true);
             }
         }
         texture.Apply(true, true);

@@ -2,19 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-[CreateAssetMenu(fileName = "NewGenTile", menuName = "WorldGen/GenTile")]
+[CreateAssetMenu(fileName = "NewGenTile", menuName = "WorldGen/WorldTiles/GenTile")]
 public class GenTile : ScriptableObject
 {
-    [SerializeField] SerializableDictionary<Planet, int> priority;
-    public TileBase baseTile;
-    public Texture2D baseTexture;
-    public Texture2D[] transitionTiles;
-    public Texture2D[] cornerTransitions;
-    [SerializeField] RandomNoiseGroup<Placement>[] details;
-    public int GetPriority(Planet planet)
-    {
-        return priority[planet];
-    }
+    public BaseTile tile;
+    [SerializeField] RandomNoiseGroup<Placement> details;
 
     public bool SelectDetail(Vector2Int position, out Placement placement, NoiseValue noiseValues)
     {
@@ -25,13 +17,11 @@ public class GenTile : ScriptableObject
             System.Random random = new System.Random(randomSeed);
             double randomNum = random.NextDouble();
 
-            for (int i = 0; i < details.Length; i++)
+            if (details.TrySelectPlacement(randomNum, out placement, noiseValues))
             {
-                if (details[i].TrySelectPlacement(randomNum, out placement, noiseValues))
-                {
-                    return true;
-                }
+                return true;
             }
+
         }
         placement = null;
         return false;

@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class Placement : ScriptableObject
 {
-    public virtual PlacementInstance CreateInstance(WorldInstance world, Vector2Int position)
+    public virtual PlacementInstance CreateInstance(PlanetGenerationInstance world, Vector2Int position)
     {
         return new PlacementInstance();
     }

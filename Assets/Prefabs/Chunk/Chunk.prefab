@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 643328698801458515}
   - component: {fileID: 2890851165211756808}
+  - component: {fileID: 1422441771043754496}
   m_Layer: 0
   m_Name: Chunk
   m_TagString: Untagged
@@ -58,6 +59,18 @@ MonoBehaviour:
       Value: {fileID: 643328699776526686}
     - Key: 4
       Value: {fileID: 6108872328195430961}
+--- !u!156049354 &1422441771043754496
+Grid:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 643328698801458513}
+  m_Enabled: 1
+  m_CellSize: {x: 1, y: 1, z: 1}
+  m_CellGap: {x: 0, y: 0, z: 0}
+  m_CellLayout: 0
+  m_CellSwizzle: 0
 --- !u!1 &643328698993399236
 GameObject:
   m_ObjectHideFlags: 0
@@ -100,30 +113,20 @@ Tilemap:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 643328698993399236}
   m_Enabled: 1
-  m_Tiles:
-  - first: {x: -41, y: 13, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 1
-      m_TileSpriteIndex: 1
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
+  m_Tiles: {}
   m_AnimatedTiles: {}
   m_TileAssetArray:
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 1
-    m_Data: {fileID: 11400000, guid: e62dcb55bc5e84af4abf0bd305a7b106, type: 2}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
   m_TileSpriteArray:
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 1
-    m_Data: {fileID: 21300000, guid: b28182497f9a3461d8982959070ae8fe, type: 3}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
   m_TileMatrixArray:
-  - m_RefCount: 1
+  - m_RefCount: 0
     m_Data:
       e00: 1
       e01: 0
@@ -142,7 +145,7 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 1
+  - m_RefCount: 0
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1

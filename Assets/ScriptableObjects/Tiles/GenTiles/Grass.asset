@@ -12,27 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd45de3f3b49d49f9912fe0f98df02ce, type: 3}
   m_Name: Grass
   m_EditorClassIdentifier: 
-  priority:
-    list:
-    - Key: 0
-      Value: 2
-  baseTile: {fileID: 11400000, guid: 34d61d78bd4d74b2d8397e96284a8801, type: 2}
-  baseTexture: {fileID: 2800000, guid: b3ba0caab858b405aaabacd9700ea184, type: 3}
-  transitionTiles:
-  - {fileID: 2800000, guid: 9f3993e78e2f54f4c9085e32c189869a, type: 3}
-  - {fileID: 2800000, guid: 05f90775bd69f40129e0f00ab601c23f, type: 3}
-  - {fileID: 2800000, guid: e97f4e3200acd4c1ea5af3f1c24e9e4f, type: 3}
-  - {fileID: 2800000, guid: cbeece43d8c6440a9a8fc320d6e7a110, type: 3}
-  - {fileID: 2800000, guid: 627c01bf55d1447b78b6e788607a1d6a, type: 3}
-  - {fileID: 2800000, guid: 55d5393f2f8a24303bfe38ba8697492c, type: 3}
-  - {fileID: 2800000, guid: bd593d9467574459daebfe08ca6294bf, type: 3}
-  - {fileID: 2800000, guid: 29ff01bf265104e59bbb07928da125a6, type: 3}
-  - {fileID: 2800000, guid: c1b6d44064533408ba7d30bf7891ac04, type: 3}
-  - {fileID: 2800000, guid: a229a252f28634854aba20ac9ea52bd5, type: 3}
-  - {fileID: 2800000, guid: 49ec9604aeded4e718670c9c55647a77, type: 3}
-  - {fileID: 2800000, guid: e8a31bad64588431790992a2897be7e9, type: 3}
-  - {fileID: 2800000, guid: 8fa84def880b44183a37592986477256, type: 3}
-  - {fileID: 2800000, guid: 90ecf3a50bba1432ab3f8784c01869ab, type: 3}
-  - {fileID: 2800000, guid: f03300d871bb9497aa94954411e5c8ac, type: 3}
-  cornerTransitions: []
-  details: []
+  tile: {fileID: 11400000, guid: cf1e22b0b833645c6b2d437abae5ea5f, type: 2}
+  details:
+    chance: 1
+    placements: []

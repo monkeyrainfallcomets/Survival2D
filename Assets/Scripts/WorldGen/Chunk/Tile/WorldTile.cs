@@ -14,7 +14,7 @@ public class WorldTile
     PlacementInstance detailInstance;
     TilePlacementInstance tileInstance;
 
-    public WorldTile(Vector2Int position, NoiseValue noiseValues, TilePlacement tile, WorldInstance world)
+    public WorldTile(Vector2Int position, NoiseValue noiseValues, TilePlacement tile, PlanetGenerationInstance world)
     {
         this.position = position;
         this.noiseValues = noiseValues;
@@ -41,7 +41,7 @@ public class WorldTile
         return true;
     }
 
-    public void Place(WorldInstance world, Vector2Int[] transitionDirections)
+    public void Place(PlanetGenerationInstance world, Vector2Int[] transitionDirections)
     {
         if (!placed)
         {
@@ -62,7 +62,7 @@ public class WorldTile
         }
     }
 
-    public void Destroy(WorldInstance world)
+    public void Destroy(PlanetGenerationInstance world)
     {
         if (placed)
         {
@@ -94,7 +94,16 @@ public class WorldTile
         }
     }
 
-    bool AddTransitions(Vector2Int[] directions, WorldInstance world)
+    public void InitialCollide(Entity entity)
+    {
+
+    }
+
+    public void LeaveCollision(Entity entity)
+    {
+
+    }
+    bool AddTransitions(Vector2Int[] directions, PlanetGenerationInstance world)
     {
         TilePlacementInstance tile;
 
@@ -107,11 +116,11 @@ public class WorldTile
                 if (world.GetTile((Vector2Int)(directions[i] + position), out tile))
                 {
                     adjacentTile = tile.GetTile();
-                    if (genTile.GetPriority(world.GetPlanet()) > adjacentTile.GetPriority(world.GetPlanet()))
+                    if (genTile.tile.GetPriority(world.GetPlanet()) > adjacentTile.tile.GetPriority(world.GetPlanet()))
                     {
                         tileInstance.AddTransition(directions[i], tile);
                     }
-                    else if (genTile.GetPriority(world.GetPlanet()) < adjacentTile.GetPriority(world.GetPlanet()))
+                    else if (genTile.tile.GetPriority(world.GetPlanet()) < adjacentTile.tile.GetPriority(world.GetPlanet()))
                     {
                         tile.AddTransition(-directions[i], tileInstance);
                     }

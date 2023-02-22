@@ -10,7 +10,7 @@ public class GoPlacementInstance : PlacementInstance
     {
         this.gameObject = gameObject;
     }
-    public override void Destroy(WorldInstance world)
+    public override void Destroy(PlanetGenerationInstance world)
     {
         MonoBehaviour.Destroy(gameObject);
     }

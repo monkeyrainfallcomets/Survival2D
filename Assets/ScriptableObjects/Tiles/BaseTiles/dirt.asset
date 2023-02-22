@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c4ecf67898a944da8c92ab3be39632d, type: 3}
+  m_Name: dirt
+  m_EditorClassIdentifier: 
+  priority:
+    list:
+    - Key: 0
+      Value: 1
+  baseTile: {fileID: 11400000, guid: e35774a50ef6a49d2b741e3ed427f1e5, type: 2}
+  baseTexture: {fileID: 2800000, guid: adf27837ac7aa4045a3b053e84221630, type: 3}
+  transitionTiles:
+  - {fileID: 2800000, guid: ea4d673a6b34d4a2bb18c012831ed79a, type: 3}
+  - {fileID: 2800000, guid: a6420d7326e4f467c88fcc5d479785d9, type: 3}
+  - {fileID: 2800000, guid: 69fd47281695c4ab28aea5f237aa5748, type: 3}
+  - {fileID: 2800000, guid: ad7e939dbcc204c45a3b3e750bdf75da, type: 3}
+  - {fileID: 2800000, guid: 0101bc03afa0f4e96b80f39ccdd4e2f5, type: 3}
+  - {fileID: 2800000, guid: 18403042436fc456c859e201c8604f9b, type: 3}
+  - {fileID: 2800000, guid: eec56f67e0c5d4bdf99a8db8e96939be, type: 3}
+  - {fileID: 2800000, guid: 6b78b556deee2460abffee2b48f670f8, type: 3}
+  - {fileID: 2800000, guid: c9251872cf4b84f0a805c47511602a2a, type: 3}
+  - {fileID: 2800000, guid: df38b9e6af0444e75b22a9a23d3d3023, type: 3}
+  - {fileID: 2800000, guid: 54271cdcecc34441b87b3af1e84296eb, type: 3}
+  - {fileID: 2800000, guid: e7cec3e9d57174be98e0d1efac659cf7, type: 3}
+  - {fileID: 2800000, guid: f4dae34274de54f30ae309229a913698, type: 3}
+  - {fileID: 2800000, guid: 3d2024cf41ce24b6697201a44cea7369, type: 3}
+  - {fileID: 2800000, guid: 1109620711ba943b8865dd9884e221a6, type: 3}
+  cornerTransitions: []

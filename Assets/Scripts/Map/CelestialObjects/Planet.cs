@@ -1,15 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
-[CreateAssetMenu(fileName = "New World", menuName = "WorldGen/World")]
-public class WorldTemplate : ScriptableObject
+
+public class Planet : CelestialObject
 {
-    [SerializeField] Planet planet;
+    [SerializeField] PlanetType planet;
     [SerializeField] NoiseMap moistureMap;
     [SerializeField] NoiseMap heatMap;
     [SerializeField] NoiseMap heightMap;
     [SerializeField] NoiseGroup<TilePlacement>[] tileGroups;
+    public void SetPlanet(PlanetParams planetParams)
+    {
+
+    }
 
     public TilePlacement SelectTile(Vector2Int position, NoiseValue noiseValues)
     {
@@ -45,23 +48,8 @@ public class WorldTemplate : ScriptableObject
         heatMap.GenerateRandomSeed();
     }
 
-    public Planet GetPlanet()
+    public PlanetType GetPlanet()
     {
         return planet;
-    }
-}
-
-
-public struct NoiseValue
-{
-    public float moistureValue;
-    public float heatValue;
-    public float heightValue;
-
-    public NoiseValue(float moistureValue, float heatValue, float heightValue)
-    {
-        this.moistureValue = moistureValue;
-        this.heatValue = heatValue;
-        this.heightValue = heightValue;
     }
 }

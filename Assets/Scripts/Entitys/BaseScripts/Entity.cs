@@ -109,8 +109,6 @@ public class Entity : MonoBehaviour
         public MovementState baseState;
         public MovementState[] states;
     }
-
-
 }
 
 
