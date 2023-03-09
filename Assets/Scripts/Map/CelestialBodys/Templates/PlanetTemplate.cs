@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlanetTemplate : CelestialObjectTemplate
+public class PlanetTemplate : CelestialBodyTemplate
 {
     [SerializeField] List<PlanetParams> planets;
     [SerializeField] Planet planetPrefab;
-    public override CelestialObject CreateCelestialObject()
+    public override CelestialBody CreateCelestialBody()
     {
         Planet planet = Instantiate(planetPrefab);
         int index = Random.Range(0, planets.Count);

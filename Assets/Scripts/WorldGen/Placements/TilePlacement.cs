@@ -31,7 +31,7 @@ public class TilePlacement : ScriptableObject
     public GenTile GetTile(Vector2Int position, NoiseValue noiseValues)
     {
         int valueAverage = (int)(((noiseValues.heightValue + noiseValues.heatValue + noiseValues.moistureValue) * 100) / 3);
-        int randomSeed = (valueAverage * (position.x * position.y));
+        int randomSeed = (valueAverage * (position.x + position.y));
         System.Random random = new System.Random(randomSeed);
         double randomNum = random.NextDouble();
         GenTile tile;

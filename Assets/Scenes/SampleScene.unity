@@ -352,6 +352,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 946708a3166f44216b115cf3d17a3b91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tileSize: 1
+  mapSize: {x: 0, y: 0}
 --- !u!1 &1132284690
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Planet : CelestialObject
+public class Planet : CelestialBody
 {
     [SerializeField] PlanetType planet;
     [SerializeField] NoiseMap moistureMap;
@@ -52,4 +52,10 @@ public class Planet : CelestialObject
     {
         return planet;
     }
+}
+
+public struct PlanetHealth
+{
+    public float toxicity;
+    public float population;
 }
