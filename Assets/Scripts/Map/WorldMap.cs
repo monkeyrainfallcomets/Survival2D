@@ -4,30 +4,149 @@ using UnityEngine;
 using System;
 public class WorldMap : MonoBehaviour
 {
-    public readonly float tileSize;
-    public readonly Vector2 mapSize;
+    [SerializeField] float tileSize;
+    [SerializeField] Vector2 mapSize;
+    [SerializeField] Canvas canvas;
     public static EventHandler UpdateCycleEvent;
-    [SerializeField] Dictionary<Vector2, CelestialBody> mapPositions = new Dictionary<Vector2, CelestialBody>();
+    [SerializeField] Dictionary<Vector2Int, CelestialBody> mapPositions = new Dictionary<Vector2Int, CelestialBody>();
     [SerializeField] GravityHandler gravityHandler;
     [SerializeField] CelestialBodyRing[] rings;
     [SerializeField] RandomSpawnRing[] spawnRings;
+    [SerializeField] CelestialBody sunPrefab;
+    [SerializeField] CelestialBody shipPrefab;
+    CelestialBody ship;
+
+    void Start()
+    {
+        Place(sunPrefab, Vector2.zero);
+
+
+    }
     public bool Place(CelestialBody celestialBody, Vector2 position)
     {
         Vector2 startTile = position / tileSize;
         Vector2 size = celestialBody.Size();
-        if (TryFillPositions(new Vector2(position.x - size.x, position.y - size.y), new Vector2(position.x + size.x, position.y + size.y), celestialBody))
+        Debug.Log(size);
+        if (TryFillPositions(new Vector2(position.x - size.x, position.y - size.y), new Vector2(position.x + size.x, position.y + size.y), celestialBody, false, true))
         {
-            gravityHandler.Add(Instantiate(celestialBody, position, Quaternion.identity));
+            CelestialBody instantiatedBody = Instantiate(celestialBody, position, Quaternion.identity);
+            gravityHandler.Add(instantiatedBody);
+            instantiatedBody.transform.SetParent(transform);
+            return true;
+        }
+        return false;
+    }
+    public bool Place(MapCelestialBodyTemplate bodyTemplate, Vector2 position)
+    {
+        CelestialBody celestialBody = bodyTemplate.CreateCelestialBody(shipPrefab);
+        Vector2 startTile = position / tileSize;
+        Vector2 size = celestialBody.Size();
+        if (TryFillPositions(new Vector2(position.x - (size.x / 2), position.y - (size.y / 2)), new Vector2(position.x + size.x, position.y + size.y), celestialBody, false, true))
+        {
+            gravityHandler.Add(celestialBody);
+            celestialBody.transform.SetParent(transform);
             return true;
         }
         return false;
     }
 
-    void Start()
+    public bool OutOfBounds(CelestialBody celestialBody)
     {
-
+        Vector2 positionInTiles = celestialBody.transform.position / tileSize;
+        return positionInTiles.x > mapSize.x || positionInTiles.y > mapSize.y;
     }
-    public bool TryFillPositions(Vector2 startPosition, Vector2 endPosition, CelestialBody body)
+
+    public void UpdatePosition(CelestialBody body, Vector3 newPosition)
+    {
+        Vector2 currentPosition = body.transform.position;
+        Vector2 size = body.Size();
+        Vector2 collisionPosition;
+        CelestialBody collisionBody;
+        if (!CheckForCollision(new Vector2(newPosition.x - size.x, currentPosition.y - size.y), new Vector2(currentPosition.x + size.x, currentPosition.y + size.y), body, out collisionPosition, out collisionBody))
+        {
+            bool collisionResultBody = body.OnCollision(collisionBody);
+            bool collisionResultOther = collisionBody.OnCollision(body);
+            if (!collisionResultBody && collisionResultOther)
+            {
+                Destroy(body);
+                return;
+            }
+            else if (collisionResultBody && !collisionResultOther)
+            {
+                Destroy(collisionBody);
+            }
+        }
+        TryFillPositions(new Vector2(currentPosition.x - size.x, currentPosition.y - size.y), new Vector2(currentPosition.x + size.x, currentPosition.y + size.y), body, true, false);
+        TryFillPositions(new Vector2(newPosition.x - size.x, currentPosition.y - size.y), new Vector2(currentPosition.x + size.x, currentPosition.y + size.y), body, false, false);
+    }
+    bool CheckForCollision(Vector2 startPosition, Vector2 endPosition, CelestialBody body, out Vector2 collisionPosition, out CelestialBody collisionBody)
+    {
+        Vector2Int iterationStart;
+        Vector2Int iterationEnd;
+        ConvertStartEnd(startPosition, endPosition, out iterationStart, out iterationEnd);
+
+        for (int y = iterationStart.y; y <= iterationEnd.y; y++)
+        {
+            for (int x = iterationStart.x; x <= iterationEnd.x; x++)
+            {
+                Vector2Int position = new Vector2Int(x, y);
+                Debug.Log(position);
+                if (mapPositions.ContainsKey(position) && mapPositions[position] != body)
+                {
+                    collisionPosition = position;
+                    collisionBody = mapPositions[position];
+                    return true;
+                }
+            }
+        }
+        collisionPosition = Vector2.zero;
+        collisionBody = null;
+        return false;
+    }
+
+    bool TryFillPositions(Vector2 startPosition, Vector2 endPosition, CelestialBody body, bool clear, bool checkForCollision)
+    {
+        Vector2Int iterationStart;
+        Vector2Int iterationEnd;
+        ConvertStartEnd(startPosition, endPosition, out iterationStart, out iterationEnd);
+        Debug.Log(iterationStart + " " + iterationEnd);
+        if (!checkForCollision && !clear)
+        {
+            for (int y = iterationStart.y; y <= iterationEnd.y; y++)
+            {
+                for (int x = iterationStart.x; x <= iterationEnd.x; x++)
+                {
+                    if (mapPositions.ContainsKey(new Vector2Int(x, y)))
+                    {
+                        if (!clear)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            mapPositions.Remove(new Vector2Int(x, y));
+                        }
+                    }
+                }
+            }
+        }
+
+        if (clear)
+        {
+            return true;
+        }
+        for (int y = iterationStart.y; y <= iterationEnd.y; y++)
+        {
+            for (int x = iterationStart.x; x <= iterationEnd.x; x++)
+            {
+                Debug.Log(new Vector2Int(x, y));
+                mapPositions[new Vector2Int(x, y)] = body;
+            }
+        }
+        return true;
+    }
+
+    void ConvertStartEnd(Vector2 startPosition, Vector2 endPosition, out Vector2Int returnStartPosition, out Vector2Int returnEndPosition)
     {
         int xStartTile = 0;
         int xEndTile = 0;
@@ -53,30 +172,17 @@ public class WorldMap : MonoBehaviour
             xStartTile = (int)(endPosition.y / tileSize);
             xEndTile = (int)(startPosition.y / tileSize);
         }
-
-        for (int y = yStartTile; y < yEndTile; y++)
-        {
-            for (int x = xStartTile; x < xEndTile; x++)
-            {
-                if (mapPositions.ContainsKey(new Vector2(x, y)))
-                {
-                    return false;
-                }
-            }
-        }
-
-        for (int y = yStartTile; y < yEndTile; y++)
-        {
-            for (int x = xStartTile; x < xEndTile; x++)
-            {
-                mapPositions[new Vector2(x, y)] = body;
-            }
-        }
-        return true;
+        returnStartPosition = new Vector2Int(xStartTile, yStartTile);
+        returnEndPosition = new Vector2Int(xEndTile, yEndTile);
     }
-    public void UpdateCycle()
+
+    void UpdateCycle()
     {
 
+    }
+    public float GetTileSize()
+    {
+        return tileSize;
     }
 }
 

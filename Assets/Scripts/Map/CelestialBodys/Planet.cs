@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Planet : CelestialBody
+public class Planet : MapCelestialBody
 {
     [SerializeField] PlanetType planet;
     [SerializeField] NoiseMap moistureMap;

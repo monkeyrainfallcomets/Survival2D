@@ -2,11 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CelestialBodyTemplate : ScriptableObject
+public class MapCamera : MonoBehaviour
 {
     // Start is called before the first frame update
-    public virtual CelestialBody CreateCelestialBody()
+    void Start()
     {
-        return new CelestialBody();
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
     }
 }

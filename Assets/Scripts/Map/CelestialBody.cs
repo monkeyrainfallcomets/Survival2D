@@ -1,14 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 public class CelestialBody : MonoBehaviour
 {
+    protected WorldMap map;
     [SerializeField] bool exertForce;
     [SerializeField] bool orbit;
     [SerializeField] bool moveable;
     [SerializeField] float mass;
     [SerializeField] GameObject interactionDisplay;
-    protected SpriteRenderer spriteRenderer;
+    [SerializeField] RectTransform rectTransform;
     public virtual void Interact()
     {
         interactionDisplay.SetActive(true);
@@ -19,7 +21,7 @@ public class CelestialBody : MonoBehaviour
     }
     public Vector2 Size()
     {
-        return spriteRenderer.bounds.size;
+        return rectTransform.rect.size * transform.localScale;
     }
     public bool CanExertForce()
     {
@@ -44,13 +46,14 @@ public class CelestialBody : MonoBehaviour
         }
         transform.position = new Vector3(transform.position.x + transformation.x, transform.position.y + transformation.y, 0);
     }
-}
-[System.Serializable]
-public class Action
-{
-    public string name;
-    public void Use()
+    public void SetMapReference(WorldMap map)
+    {
+        this.map = map;
+    }
+    public virtual bool OnCollision(CelestialBody body)
     {
 
+        return mass > body.mass;
     }
 }
+
